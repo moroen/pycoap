@@ -1,0 +1,6 @@
+.direnv/
+.eggs/
+.envrc
+dist/
+build/
+*egg*

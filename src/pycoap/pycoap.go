@@ -70,8 +70,6 @@ func coapPutRequest(gateway, uri, payload *C.char) *C.char {
 
 //export coapPutRequestDTLS
 func coapPutRequestDTLS(gateway, uri, ident, key, payload *C.char) *C.char {
-	log.Println("Putrequest")
-	log.Println(C.GoString(payload))
 	gw := strings.Split(C.GoString(gateway), ":")
 	port, err := strconv.Atoi(gw[1])
 	if err != nil {
@@ -79,8 +77,6 @@ func coapPutRequestDTLS(gateway, uri, ident, key, payload *C.char) *C.char {
 	}
 
 	params := coap.RequestParams{Host: gw[0], Port: port, Uri: C.GoString(uri), Id: C.GoString(ident), Key: C.GoString(key), Payload: C.GoString(payload)}
-
-	log.Println(params)
 
 	res, err := coap.PutRequest(params)
 	if err != nil {
