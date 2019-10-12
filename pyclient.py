@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import pycoap
+
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -15,11 +16,13 @@ class MalformedURI(Exception):
 class MissingCredentials(Exception):
     pass
 
-if __name__ == '__main__':
+if __name__ == '__main__':    
     result = None
     args = parser.parse_args()
 
-    uri = args.uri.split("/")
+    fullUri = args.uri
+    
+    uri = fullUri.split("/")
 
     try:
         if not (uri[0] == "coap:" or uri[0] == "coaps:"):
@@ -42,10 +45,9 @@ if __name__ == '__main__':
             if args.ident==None or args.key==None:
                 raise MissingCredentials
             if args.payload != None:
-                print(args.payload)
-                result = pycoap.DTLSPutRequest(uri[2], dest, args.payload, args.ident, args.key)
+                result = pycoap.Request(fullUri, payload=args.payload, ident=args.ident, key=args.key)
             else:
-                result = pycoap.DTLSRequest(uri[2], dest, args.ident, args.key)
+                result = pycoap.Request(fullUri, ident=args.ident, key=args.key)
 
         if result!=None:
             print("Response: {}".format(result))

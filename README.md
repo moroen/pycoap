@@ -23,8 +23,8 @@ On debian-based distros:
 ## Installation
 
 ```shell
-  $ git clone https://github.com/moroen/python-coap-module.git
-  $ cd python-coap-module.git
+  $ git clone https://github.com/moroen/pycoap.git
+  $ cd pycoap
   $ sudo python3 setup.py install
 ```
 

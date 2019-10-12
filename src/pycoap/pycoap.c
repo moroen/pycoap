@@ -96,7 +96,7 @@ static struct PyModuleDef coapmodule = {
 };
 
 PyMODINIT_FUNC  
-PyInit_pycoap(void)  
+PyInit__pycoap(void)  
 {
     return PyModule_Create(&coapmodule);
 }
