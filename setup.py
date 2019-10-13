@@ -6,7 +6,7 @@ setup(
     name='pycoap',
     description='A low level extension for COAP/COAPS-requests',
     url='https://github.com/moroen/python-coap-module',
-    version='0.2.0',
+    version='0.3.0',
     author='moroen',
     author_email='no@email.com',
     classifiers=[
@@ -19,5 +19,5 @@ setup(
     ],
     packages=["pycoap"],
     build_golang={'root': 'github.com/moroen/pycoap'},
-    setup_requires=['setuptools-golang>=0.2.0'],
+    setup_requires=['setuptools-golang'],
 )

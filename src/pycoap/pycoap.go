@@ -8,9 +8,9 @@ package main
 // char * ParseStringArgument(PyObject *);
 import (
 	"C"
-	"strings"
-	"strconv"
 	"log"
+	"strconv"
+	"strings"
 
 	coap "github.com/moroen/gocoap"
 )
@@ -79,6 +79,25 @@ func coapPutRequestDTLS(gateway, uri, ident, key, payload *C.char) *C.char {
 	params := coap.RequestParams{Host: gw[0], Port: port, Uri: C.GoString(uri), Id: C.GoString(ident), Key: C.GoString(key), Payload: C.GoString(payload)}
 
 	res, err := coap.PutRequest(params)
+	if err != nil {
+		log.Println(err.Error())
+		return nil
+	}
+
+	return C.CString(string(res))
+}
+
+//export coapPostRequestDTLS
+func coapPostRequestDTLS(gateway, uri, ident, key, payload *C.char) *C.char {
+	gw := strings.Split(C.GoString(gateway), ":")
+	port, err := strconv.Atoi(gw[1])
+	if err != nil {
+		panic(err.Error())
+	}
+
+	params := coap.RequestParams{Host: gw[0], Port: port, Uri: C.GoString(uri), Id: C.GoString(ident), Key: C.GoString(key), Payload: C.GoString(payload)}
+
+	res, err := coap.PostRequest(params)
 	if err != nil {
 		log.Println(err.Error())
 		return nil

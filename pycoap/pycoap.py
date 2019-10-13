@@ -1,8 +1,10 @@
 import _pycoap
 
+GET = 0
+PUT = 1
+POST = 2
 
-
-def Request(uri, payload=None, ident=None, key=None):
+def Request(uri, payload=None, method=GET, ident=None, key=None):
     if (payload is None) and (ident is None):
         print("Coap-request")
         return
@@ -24,6 +26,9 @@ def Request(uri, payload=None, ident=None, key=None):
         host = uri[2]
         dest = "/".join(uri[3:])
 
-        result = _pycoap.DTLSPutRequest(host, dest, payload, ident, key)
+        if method == PUT:
+            result = _pycoap.DTLSPutRequest(host, dest, payload, ident, key)
+        elif method == POST:
+            result = _pycoap.DTLSPostRequest(host, dest, payload, ident, key)
         return result
     

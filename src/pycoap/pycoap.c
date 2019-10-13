@@ -8,6 +8,7 @@ char * coapRequest(char *, char*);
 char * coapPutRequest(char *, char *, char *);
 char * coapRequestDTLS(char *, char*, char *, char *);
 char * coapPutRequestDTLS(char *, char *, char *, char *, char *);
+char * coapPostRequestDTLS(char *, char *, char *, char *, char *);
 
 
 // Workaround missing variadic function support
@@ -83,11 +84,26 @@ PyObject * putRequestDTLS(PyObject *self, PyObject *args) {
     
 }
 
+PyObject * postRequestDTLS(PyObject *self, PyObject *args) {
+    char *gateway, *uri, *ident, *key, *payload, *res;
+
+    if (!PyArg_ParseTuple(args, "sssss", &gateway, &uri, &payload, &ident, &key))
+        Py_RETURN_NONE;
+
+    res = coapPostRequestDTLS(gateway, uri, ident, key, payload);
+    if (!res)
+        Py_RETURN_NONE;
+
+    return PyUnicode_FromString(res);
+    
+}
+
 static PyMethodDef CoapMethods[] = {
     {"Request", request, METH_VARARGS, "Make a COAP Request."},
     {"PutRequest", putRequest, METH_VARARGS, "Make a COAP Put Request."},
-    {"DTLSRequest", requestDTLS, METH_VARARGS, "Make a COAP Request."},
-    {"DTLSPutRequest", putRequestDTLS, METH_VARARGS, "Make a COAP Put Request."},
+    {"DTLSRequest", requestDTLS, METH_VARARGS, "Make a COAP GET Request."},
+    {"DTLSPutRequest", putRequestDTLS, METH_VARARGS, "Make a COAP PUT Request."},
+    {"DTLSPostRequest", postRequestDTLS, METH_VARARGS, "Make a COAP POST Request."},
     {NULL, NULL, 0, NULL}
 };
 
