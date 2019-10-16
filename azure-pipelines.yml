@@ -28,7 +28,7 @@ steps:
     python setup.py sdist bdist_wheel
   displayName: 'Build wheels'
 
-- script: |
-    pip install pytest pytest-azurepipelines
-    pytest
-  displayName: 'pytest'
+#- script: |
+#    pip install pytest pytest-azurepipelines
+#    pytest
+#  displayName: 'pytest'
