@@ -17,6 +17,7 @@ strategy:
     windows:
       imageName: 'vs2017-win2016'
       python.version: '3.7'
+      python.architecture: 'x86'
 
 pool:
   vmImage: $(imageName)
@@ -25,7 +26,8 @@ steps:
 - task: UsePythonVersion@0
   inputs:
     versionSpec: '$(python.version)'
-  displayName: 'Use Python $(python.version)'
+    architecture: '$(python.architecture)'
+  displayName: 'Use Python $(python.version) - $(python.architecture)'
 
 - script: |
     python -m pip install --upgrade pip setuptools
