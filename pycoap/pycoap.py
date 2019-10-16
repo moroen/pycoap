@@ -28,7 +28,10 @@ def Request(uri, payload=None, method=GET, ident=None, key=None):
 
         if method == PUT:
             result = _pycoap.DTLSPutRequest(host, dest, payload, ident, key)
+            return result
         elif method == POST:
             result = _pycoap.DTLSPostRequest(host, dest, payload, ident, key)
-        return result
+            return result        
+        
+        return None
     

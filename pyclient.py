@@ -9,7 +9,7 @@ parser.add_argument("uri")
 parser.add_argument("payload", nargs="?")
 parser.add_argument("--ident")
 parser.add_argument("--key")
-parser.add_argument("--method", default=pycoap.PUT)
+parser.add_argument("--method", default="PUT")
 
 class MalformedURI(Exception):
     pass
@@ -37,9 +37,7 @@ if __name__ == '__main__':
     uri = fullUri.split("/")
 
     method = select_method(args.method)
-    print(method)
-
-
+  
     try:
         if not (uri[0] == "coap:" or uri[0] == "coaps:"):
             raise (MalformedURI())
