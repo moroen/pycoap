@@ -24,11 +24,11 @@ strategy:
 pool:
   vmImage: $(imageName)
 
-variables:
-  GOARCH: '386'
-  CGO_ENABLED: '1'
-  CGO_CFLAGS: '-g -O2 -m32'
-  CFLAGS: '-m32'
+#variables:
+#  GOARCH: '386'
+#  CGO_ENABLED: '1'
+#  CGO_CFLAGS: '-g -O2 -m32'
+#  CFLAGS: '-m32'
   
 steps:
 - task: UsePythonVersion@0
@@ -48,7 +48,6 @@ steps:
   displayName: 'Install dependencies'
 
 - script: |
-    set MSYSTEM=MINGW32
     python setup.py sdist bdist_wheel
   displayName: 'Build wheels'
 
