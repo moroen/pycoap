@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/moroen/PyCOAP/_apis/build/status/pycoap?branchName=master)](https://dev.azure.com/moroen/PyCOAP/_build/latest?definitionId=1&branchName=master)
+
 # PyCOAP
 
 A python extension module written in GOLANG to provide basic COAP-capabilities, including support for DTLS.
