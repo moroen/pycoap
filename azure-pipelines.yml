@@ -6,57 +6,46 @@
 trigger:
 - master
 
-strategy:
-  matrix:
-    linux:
-      imageName: 'ubuntu-latest'
-      python.version: '3.7'
-      python.architecture: 'x64'
-#    mac:
-#      imageName: 'macos-10.13'
-#      python.version: '3.7'
-#      python.architecture: 'x64'
+pr: none
+
+jobs:
+
+- job: Posix
+  strategy:
+    matrix:
+      linux:
+        imageName: 'ubuntu-latest'
+        python.version: '3.7'
+        python.architecture: 'x64'
+      mac:
+        imageName: 'macos-10.13'
+        python.version: '3.7'
+        python.architecture: 'x64'
 #    windows:
 #      imageName: 'vs2017-win2016'
 #      python.version: '3.7'
 #      python.architecture: 'x86'
 
-pool:
-  vmImage: $(imageName)
+  pool:
+    vmImage: $(imageName)
+    
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+      architecture: '$(python.architecture)'
+    displayName: 'Use Python $(python.version) - $(python.architecture)'
 
-#variables:
-#  GOARCH: '386'
-#  CGO_ENABLED: '1'
-#  CGO_CFLAGS: '-g -O2 -m32'
-#  CFLAGS: '-m32'
-  
-steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '$(python.version)'
-    architecture: '$(python.architecture)'
-  displayName: 'Use Python $(python.version) - $(python.architecture)'
+  - script: |
+      python -m pip install --upgrade pip setuptools
+      python -m pip install wheel
+    displayName: 'Install dependencies'
 
-- script: |
-    set
-    go env
-  displayName: 'Show env'
+  - script: |
+      python setup.py sdist bdist_wheel
+    displayName: 'Build wheels'
 
-- script: |
-    python -m pip install --upgrade pip setuptools
-    python -m pip install wheel
-  displayName: 'Install dependencies'
-
-- script: |
-    python setup.py sdist bdist_wheel
-  displayName: 'Build wheels'
-
-- task: PublishPipelineArtifact@0
-  inputs:
-    artifactName: 'artifact_$(Agent.OS)_$(Agent.JobName)_$(python.architecture)'
-    targetPath: 'dist'
-
-#- script: |
-#    pip install pytest pytest-azurepipelines
-#    pytest
-#  displayName: 'pytest'
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: 'artifact_$(Agent.OS)_$(Agent.JobName)_$(python.architecture)'
+      targetPath: 'dist'
