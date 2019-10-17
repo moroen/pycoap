@@ -10,42 +10,85 @@ pr: none
 
 jobs:
 
-- job: Posix
-  strategy:
-    matrix:
-      linux:
-        imageName: 'ubuntu-latest'
-        python.version: '3.7'
-        python.architecture: 'x64'
-      mac:
-        imageName: 'macos-10.13'
-        python.version: '3.7'
-        python.architecture: 'x64'
-#    windows:
-#      imageName: 'vs2017-win2016'
-#      python.version: '3.7'
-#      python.architecture: 'x86'
+# - job: Posix
+#   strategy:
+#     matrix:
+#       linux:
+#         imageName: 'ubuntu-latest'
+#         python.version: '3.7'
+#         python.architecture: 'x64'
+#       mac:
+#         imageName: 'macos-10.13'
+#         python.version: '3.7'
+#         python.architecture: 'x64'
+# #    windows:
+# #      imageName: 'vs2017-win2016'
+# #      python.version: '3.7'
+# #      python.architecture: 'x86'
 
-  pool:
-    vmImage: $(imageName)
-    
+#   pool:
+#     vmImage: $(imageName)
+
+#   steps:
+#   - task: UsePythonVersion@0
+#     inputs:
+#       versionSpec: '$(python.version)'
+#       architecture: '$(python.architecture)'
+#     displayName: 'Use Python $(python.version) - $(python.architecture)'
+
+#   - script: |
+#       python -m pip install --upgrade pip setuptools
+#       python -m pip install wheel
+#     displayName: 'Install dependencies'
+
+#   - script: |
+#       python setup.py sdist bdist_wheel
+#     displayName: 'Build wheels'
+
+#   - task: PublishPipelineArtifact@0
+#     inputs:
+#       artifactName: 'artifact_$(Agent.OS)_$(Agent.JobName)_$(python.architecture)'
+#       targetPath: 'dist'
+
+- job: win32
+  pool: 
+    vmImage: "windows-2019"
+  
   steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '$(python.version)'
-      architecture: '$(python.architecture)'
-    displayName: 'Use Python $(python.version) - $(python.architecture)'
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: "3.7"
+        architecture: "x86"
 
-  - script: |
-      python -m pip install --upgrade pip setuptools
-      python -m pip install wheel
-    displayName: 'Install dependencies'
+    - script: |
+        git clone https://github.com/msys2/msys2-ci-base.git %CD:~0,2%\msys64
+        %CD:~0,2%\msys64\usr\bin\rm -rf %CD:~0,2%\msys64\.git
+      displayName: Install MSYS2
+      
+    - script: |
+        %CD:~0,2%\msys64\usr\bin\pacman --noconfirm -Syyuu
+        %CD:~0,2%\msys64\usr\bin\pacman --noconfirm -Syuu
+      displayName: Update MSYS2
+      
+    - script: |
+        %CD:~0,2%\msys64\usr\bin\pacman --noconfirm --needed -S base-devel mingw-w64-i686-toolchain
+        %CD:~0,2%\msys64\usr\bin\pacman --noconfirm -Scc
+        %CD:~0,2%\msys64\usr\bin\sed -i "s|#CacheDir.*|CacheDir=/c/Users/%USERNAME%/AppData/Local/Temp|g" /etc/pacman.conf
+      displayName: Install Toolchain
 
-  - script: |
-      python setup.py sdist bdist_wheel
-    displayName: 'Build wheels'
+    - script: |
+        python -m pip install --upgrade pip setuptools
+        python -m pip install wheel
+      displayName: 'Install Python dependencies'
+    
+    - script: |
+        set PATH=%PATH%;%CD:~0,2%\msys64\mingw32\bin
+        set GOARCH=386
+        set CGO_ENABLED=1
+        python setup.py bdist_wheel
+      displayName: Build wheel
 
-  - task: PublishPipelineArtifact@0
-    inputs:
-      artifactName: 'artifact_$(Agent.OS)_$(Agent.JobName)_$(python.architecture)'
-      targetPath: 'dist'
+    - task: PublishPipelineArtifact@0
+      inputs:
+        artifactName: 'artifact_$(Agent.OS)_$(Agent.JobName)_$(python.architecture)'
+        targetPath: 'dist'
