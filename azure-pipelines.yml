@@ -10,7 +10,7 @@ pr: none
 
 jobs:
 
-- job: Posix
+- job: nix
   strategy:
     matrix:
       linux:
@@ -67,7 +67,7 @@ jobs:
 
   - task: PublishPipelineArtifact@0
     inputs:
-      artifactName: '$(Agent.OS)_$(python.architecture)'
+      artifactName: '$(Agent.OS)_$(Agent.JobName)_$(python.architecture)'
       targetPath: 'dist'
 
 - job: win32
@@ -111,6 +111,6 @@ jobs:
 
     - task: PublishPipelineArtifact@0
       inputs:
-        artifactName: '$(Agent.OS)_$(python.architecture)'
+        artifactName: '$(Agent.OS)_$(Agent.JobName)_$(python.architecture)'
         targetPath: 'dist'
 
