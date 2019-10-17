@@ -82,9 +82,10 @@ jobs:
       displayName: 'Install Python dependencies'
     
     - script: |
-        set PATH=%PATH%;%CD:~0,2%\msys64\mingw32\bin
+        set PATH=%CD:~0,2%\msys64\mingw32\bin;%PATH%
         set GOARCH=386
         set CGO_ENABLED=1
+        del %CD:~0,2%\msys64\mingw32\bin\python.exe
         python setup.py bdist_wheel
       displayName: Build wheel
 
