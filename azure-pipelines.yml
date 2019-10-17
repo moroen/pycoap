@@ -8,14 +8,14 @@ trigger:
 
 strategy:
   matrix:
-    linux:
-      imageName: 'ubuntu-latest'
-      python.version: '3.7'
-      python.architecture: 'x64'
-    mac:
-      imageName: 'macos-10.13'
-      python.version: '3.7'
-      python.architecture: 'x64'
+#    linux:
+#      imageName: 'ubuntu-latest'
+#      python.version: '3.7'
+#      python.architecture: 'x64'
+#    mac:
+#      imageName: 'macos-10.13'
+#      python.version: '3.7'
+#      python.architecture: 'x64'
     windows:
       imageName: 'vs2017-win2016'
       python.version: '3.7'
@@ -24,12 +24,20 @@ strategy:
 pool:
   vmImage: $(imageName)
 
+variables:
+  GOARCH: '386'
+  CGO_ENABLED: '1'
+
 steps:
 - task: UsePythonVersion@0
   inputs:
     versionSpec: '$(python.version)'
     architecture: '$(python.architecture)'
   displayName: 'Use Python $(python.version) - $(python.architecture)'
+
+- script: |
+    go env
+  displayName: 'Show GO env'
 
 - script: |
     python -m pip install --upgrade pip setuptools
