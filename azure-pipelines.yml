@@ -27,7 +27,8 @@ pool:
 variables:
   GOARCH: '386'
   CGO_ENABLED: '1'
-
+  CGO_CFLAGS: "-g -O2 -m32"
+  
 steps:
 - task: UsePythonVersion@0
   inputs:
