@@ -38,7 +38,7 @@ jobs:
     displayName: 'Install dependencies'
 
   - script: |
-      python setup.py sdist bdist_wheel
+      python setup.py bdist_wheel
     displayName: 'Build wheels'
 
   - task: PublishPipelineArtifact@0
@@ -62,7 +62,7 @@ jobs:
     displayName: 'Install dependencies'
 
   - script: |
-      python setup.py sdist bdist_wheel
+      python setup.py bdist_wheel
     displayName: 'Build wheels'
 
   - task: PublishPipelineArtifact@0
