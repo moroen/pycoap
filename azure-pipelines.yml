@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
 variables:
-  CACHE_FOLDER: "%CD:~0,2%\\msys64"
+  CACHE_FOLDER: $(System.DefaultWorkingDirectory)\msys64
 
 trigger:
 - master
@@ -107,13 +107,13 @@ jobs:
       displayName: Cache MSYS2 Toolchain
     
     - script: |
-        git clone https://github.com/msys2/msys2-ci-base.git %CD:~0,2%\msys64
-        %CD:~0,2%\msys64\usr\bin\rm -rf %CD:~0,2%\msys64\.git
-        %CD:~0,2%\msys64\usr\bin\pacman --noconfirm -Syyuu
-        %CD:~0,2%\msys64\usr\bin\pacman --noconfirm -Syuu
-        %CD:~0,2%\msys64\usr\bin\pacman --noconfirm --needed -S base-devel mingw-w64-i686-toolchain
-        %CD:~0,2%\msys64\usr\bin\pacman --noconfirm -Scc
-        %CD:~0,2%\msys64\usr\bin\sed -i "s|#CacheDir.*|CacheDir=/c/Users/%USERNAME%/AppData/Local/Temp|g" /etc/pacman.conf
+        git clone https://github.com/msys2/msys2-ci-base.git $(System.DefaultWorkingDirectory)\msys64
+        $(System.DefaultWorkingDirectory)\msys64\usr\bin\rm -rf $(System.DefaultWorkingDirectory)\msys64\.git
+        $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syyuu
+        $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syuu
+        $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm --needed -S base-devel mingw-w64-i686-toolchain
+        $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Scc
+        $(System.DefaultWorkingDirectory)\msys64\usr\bin\sed -i "s|#CacheDir.*|CacheDir=/c/Users/%USERNAME%/AppData/Local/Temp|g" /etc/pacman.conf
       displayName: Install Toolchain
 
     - task: UsePythonVersion@0
@@ -128,10 +128,10 @@ jobs:
       displayName: 'Install Python dependencies'
     
     - script: |
-        set PATH=%CD:~0,2%\msys64\mingw32\bin;%PATH%
+        set PATH=$(System.DefaultWorkingDirectory)\msys64\mingw32\bin;%PATH%
         set GOARCH=386
         set CGO_ENABLED=1
-        del %CD:~0,2%\msys64\mingw32\bin\python.exe
+        del $(System.DefaultWorkingDirectory)\msys64\mingw32\bin\python.exe
         python setup.py bdist_wheel
       displayName: Build wheel
 
