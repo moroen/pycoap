@@ -126,18 +126,30 @@ jobs:
 
     - task: UsePythonVersion@0
       inputs:
-        versionSpec: '$(python.version)'
-        architecture: '$(python.architecture)'
-      displayName: "Set Python version to $(python.version)"
+        versionSpec: '3.5'
+        architecture: 'x86'
+      displayName: "Set Python version to 3.5"
 
-    - script: |
-        python -m pip install --upgrade pip setuptools
-        python -m pip install wheel
-        python setup.py bdist_wheel
-      displayName: Build wheel
+    - template: azure/build_python.yml
+
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.6'
+        architecture: 'x86'
+      displayName: "Set Python version to 3.6"
+
+    - template: azure/build_python.yml
+
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.7'
+        architecture: 'x86'
+      displayName: "Set Python version to 3.7"
+
+    - template: azure/build_python.yml
 
     - task: PublishPipelineArtifact@0
       inputs:
-        artifactName: '$(Agent.OS)_$(Agent.JobName)_$(python.version)'
+        artifactName: '$(Agent.OS)_$(Agent.JobName)'
         targetPath: 'dist'
 
