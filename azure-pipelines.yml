@@ -103,7 +103,7 @@ jobs:
     - task: CacheBeta@0
       inputs:
         key: msys64 | $(Agent.OS)
-        path: $(CACHE_FOLDER)
+        path: "$(Pipeline.Workspace)/.cache"
       displayName: Cache MSYS2 Toolchain
     
     - script: |
