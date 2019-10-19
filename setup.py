@@ -6,7 +6,7 @@ setup(
     name="pycoap",
     description="A low level extension for COAP/COAPS-requests",
     url="https://github.com/moroen/python-coap-module",
-    version="0.3.1",
+    version="0.3.2",
     author="moroen",
     author_email="no@email.com",
     classifiers=[
