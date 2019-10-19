@@ -134,9 +134,9 @@ jobs:
 
     - task: UsePythonVersion@0
       inputs:
-        versionSpec: "3.8"
+        versionSpec: "3.6"
         architecture: "x86"
-      displayName: "Set Python version to 3.8"
+      displayName: "Set Python version to 3.6"
 
     - script: |
         python -m pip install --upgrade pip setuptools
