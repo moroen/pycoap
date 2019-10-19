@@ -3,6 +3,9 @@
 # Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
+variables:
+  CACHE_FOLDER: $(Pipeline.Workspace)/.cache
+
 trigger:
 - master
 
@@ -97,17 +100,17 @@ jobs:
     vmImage: "windows-2019"
   
   steps:
+    - task: CacheBeta@0
+      inputs:
+        key: msys64 | $(Agent.OS)
+        path: $(CACHE_FOLDER)
+      displayName: Cache MSYS2 Toolchain
+    
     - script: |
         git clone https://github.com/msys2/msys2-ci-base.git %CD:~0,2%\msys64
         %CD:~0,2%\msys64\usr\bin\rm -rf %CD:~0,2%\msys64\.git
-      displayName: Install MSYS2
-      
-    - script: |
         %CD:~0,2%\msys64\usr\bin\pacman --noconfirm -Syyuu
         %CD:~0,2%\msys64\usr\bin\pacman --noconfirm -Syuu
-      displayName: Update MSYS2
-      
-    - script: |
         %CD:~0,2%\msys64\usr\bin\pacman --noconfirm --needed -S base-devel mingw-w64-i686-toolchain
         %CD:~0,2%\msys64\usr\bin\pacman --noconfirm -Scc
         %CD:~0,2%\msys64\usr\bin\sed -i "s|#CacheDir.*|CacheDir=/c/Users/%USERNAME%/AppData/Local/Temp|g" /etc/pacman.conf
@@ -118,25 +121,6 @@ jobs:
         versionSpec: "3.7"
         architecture: "x86"
       displayName: "Set Python version to 3.7"
-
-    - script: |
-        python -m pip install --upgrade pip setuptools
-        python -m pip install wheel
-      displayName: 'Install Python dependencies'
-    
-    - script: |
-        set PATH=%CD:~0,2%\msys64\mingw32\bin;%PATH%
-        set GOARCH=386
-        set CGO_ENABLED=1
-        del %CD:~0,2%\msys64\mingw32\bin\python.exe
-        python setup.py bdist_wheel
-      displayName: Build wheel
-
-    - task: UsePythonVersion@0
-      inputs:
-        versionSpec: "3.6"
-        architecture: "x86"
-      displayName: "Set Python version to 3.6"
 
     - script: |
         python -m pip install --upgrade pip setuptools
