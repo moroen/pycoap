@@ -26,6 +26,9 @@ def Request(uri, payload=None, method=GET, ident=None, key=None):
         host = uri[2]
         dest = "/".join(uri[3:])
 
+        if method == GET:
+            method = PUT
+
         if method == PUT:
             result = _pycoap.DTLSPutRequest(host, dest, payload, ident, key)
             return result
