@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
 variables:
-  CACHE_FOLDER: $(Pipeline.Workspace)/.cache
+  CACHE_FOLDER: "%CD:~0,2%\\msys64"
 
 trigger:
 - master
@@ -103,7 +103,7 @@ jobs:
     - task: CacheBeta@0
       inputs:
         key: msys64 | $(Agent.OS)
-        path: "$(Pipeline.Workspace)/.cache"
+        path: $(CACHE_FOLDER)
       displayName: Cache MSYS2 Toolchain
     
     - script: |
