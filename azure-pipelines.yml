@@ -117,6 +117,13 @@ jobs:
         $(System.DefaultWorkingDirectory)\msys64\usr\bin\sed -i "s|#CacheDir.*|CacheDir=/c/Users/%USERNAME%/AppData/Local/Temp|g" /etc/pacman.conf
       displayName: Install Toolchain
 
+    - script:
+        set PATH=$(System.DefaultWorkingDirectory)\msys64\mingw32\bin;%PATH%
+        set GOARCH=386
+        set CGO_ENABLED=1
+        del $(System.DefaultWorkingDirectory)\msys64\mingw32\bin\python.exe
+      displayName: Setup build environment
+
     - task: UsePythonVersion@0
       inputs:
         versionSpec: '$(python.version)'
@@ -126,13 +133,6 @@ jobs:
     - script: |
         python -m pip install --upgrade pip setuptools
         python -m pip install wheel
-      displayName: 'Install Python dependencies'
-    
-    - script: |
-        set PATH=$(System.DefaultWorkingDirectory)\msys64\mingw32\bin;%PATH%
-        set GOARCH=386
-        set CGO_ENABLED=1
-        del $(System.DefaultWorkingDirectory)\msys64\mingw32\bin\python.exe
         python setup.py bdist_wheel
       displayName: Build wheel
 
