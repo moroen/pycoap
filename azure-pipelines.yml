@@ -130,8 +130,8 @@ jobs:
 
     - task: UsePythonVersion@0
       inputs:
-        versionSpec: $(python.version)
-        architecture: $(python.architecture)
+        versionSpec: '$(python.version)'
+        architecture: '$(python.architecture)'
       displayName: "Set Python version to $(python.version)"
 
     - script: |
