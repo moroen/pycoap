@@ -96,6 +96,18 @@ jobs:
 #       targetPath: 'dist'
 
 - job: win32
+  strategy:
+    matrix:
+      python3.5:
+        python.version: '3.5'
+        python.architecture: 'x86'
+      python3.6:
+        python.version: '3.6'
+        python.architecture: 'x86'
+      python3.7:
+        python.version: '3.7'
+        python.architecture: 'x86'
+
   pool: 
     vmImage: "windows-2019"
   
@@ -118,9 +130,9 @@ jobs:
 
     - task: UsePythonVersion@0
       inputs:
-        versionSpec: "3.7"
-        architecture: "x86"
-      displayName: "Set Python version to 3.7"
+        versionSpec: $(python.version)
+        architecture: $(python.architecture)
+      displayName: "Set Python version to $(python.version)"
 
     - script: |
         python -m pip install --upgrade pip setuptools
@@ -137,6 +149,6 @@ jobs:
 
     - task: PublishPipelineArtifact@0
       inputs:
-        artifactName: '$(Agent.OS)_$(Agent.JobName)_x86'
+        artifactName: '$(Agent.OS)_$(Agent.JobName)_$(python.version)'
         targetPath: 'dist'
 
