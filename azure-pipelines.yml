@@ -106,12 +106,12 @@ jobs:
         $(System.DefaultWorkingDirectory)\msys64\usr\bin\rm -rf $(System.DefaultWorkingDirectory)\msys64\.git
       displayName: Install MSYS2
     
-    - script: 
+    - script: |
         $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syyuu
         $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syuu
       displayName: Update MSYS2
 
-    - script: 
+    - script: |
         $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm --needed -S base-devel mingw-w64-i686-toolchain
         $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Scc
         $(System.DefaultWorkingDirectory)\msys64\usr\bin\sed -i "s|#CacheDir.*|CacheDir=/c/Users/%USERNAME%/AppData/Local/Temp|g" /etc/pacman.conf
