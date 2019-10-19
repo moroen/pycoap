@@ -96,33 +96,22 @@ jobs:
 #       targetPath: 'dist'
 
 - job: win32
-  strategy:
-    matrix:
-      python3.5:
-        python.version: '3.5'
-        python.architecture: 'x86'
-      python3.6:
-        python.version: '3.6'
-        python.architecture: 'x86'
-      python3.7:
-        python.version: '3.7'
-        python.architecture: 'x86'
-
+  
   pool: 
     vmImage: "windows-2019"
   
-  steps:
-    - task: CacheBeta@0
-      inputs:
-        key: msys64 | $(Agent.OS)
-        path: $(CACHE_FOLDER)
-      displayName: Cache MSYS2 Toolchain
-    
+  steps:      
     - script: |
         git clone https://github.com/msys2/msys2-ci-base.git $(System.DefaultWorkingDirectory)\msys64
         $(System.DefaultWorkingDirectory)\msys64\usr\bin\rm -rf $(System.DefaultWorkingDirectory)\msys64\.git
+      displayName: Install MSYS2
+    
+    - script: 
         $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syyuu
         $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syuu
+      displayName: Update MSYS2
+
+    - script: 
         $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm --needed -S base-devel mingw-w64-i686-toolchain
         $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Scc
         $(System.DefaultWorkingDirectory)\msys64\usr\bin\sed -i "s|#CacheDir.*|CacheDir=/c/Users/%USERNAME%/AppData/Local/Temp|g" /etc/pacman.conf
