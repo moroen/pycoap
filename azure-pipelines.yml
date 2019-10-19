@@ -9,99 +9,94 @@ trigger:
 pr: none
 
 jobs:
-- job: source
-  pool:
-    vmImage: 'ubuntu-latest'
+# - job: source
+#   pool:
+#     vmImage: 'ubuntu-latest'
 
-  steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '3.7'
-    displayName: 'Use python 3.7'
+#   steps:
+#   - task: UsePythonVersion@0
+#     inputs:
+#       versionSpec: '3.7'
+#     displayName: 'Use python 3.7'
 
-  - script: |
-      python -m pip install --upgrade pip setuptools
-      python -m pip install wheel
-    displayName: 'Install dependencies'
+#   - script: |
+#       python -m pip install --upgrade pip setuptools
+#       python -m pip install wheel
+#     displayName: 'Install dependencies'
 
-  - script: |
-      python setup.py sdist
-    displayName: 'Build source wheel'
-  - task: PublishPipelineArtifact@0
-    inputs:
-      artifactName: 'source'
-      targetPath: 'dist'
+#   - script: |
+#       python setup.py sdist
+#     displayName: 'Build source wheel'
+#   - task: PublishPipelineArtifact@0
+#     inputs:
+#       artifactName: 'source'
+#       targetPath: 'dist'
 
-- job: nix
-  strategy:
-    matrix:
-      linux:
-        imageName: 'ubuntu-latest'
-        python.version: '3.7'
-        python.architecture: 'x64'
-      mac:
-        imageName: 'macos-10.13'
-        python.version: '3.7'
-        python.architecture: 'x64'
+# - job: nix
+#   strategy:
+#     matrix:
+#       linux:
+#         imageName: 'ubuntu-latest'
+#         python.version: '3.7'
+#         python.architecture: 'x64'
+#       mac:
+#         imageName: 'macos-10.13'
+#         python.version: '3.7'
+#         python.architecture: 'x64'
 
-  pool:
-    vmImage: $(imageName)
+#   pool:
+#     vmImage: $(imageName)
 
-  steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '$(python.version)'
-      architecture: '$(python.architecture)'
-    displayName: 'Use Python $(python.version) - $(python.architecture)'
+#   steps:
+#   - task: UsePythonVersion@0
+#     inputs:
+#       versionSpec: '$(python.version)'
+#       architecture: '$(python.architecture)'
+#     displayName: 'Use Python $(python.version) - $(python.architecture)'
 
-  - script: |
-      python -m pip install --upgrade pip setuptools
-      python -m pip install wheel
-    displayName: 'Install dependencies'
+#   - script: |
+#       python -m pip install --upgrade pip setuptools
+#       python -m pip install wheel
+#     displayName: 'Install dependencies'
 
-  - script: |
-      python setup.py bdist_wheel
-    displayName: 'Build wheels'
+#   - script: |
+#       python setup.py bdist_wheel
+#     displayName: 'Build wheels'
 
-  - task: PublishPipelineArtifact@0
-    inputs:
-      artifactName: '$(Agent.OS)_$(python.architecture)'
-      targetPath: 'dist'
+#   - task: PublishPipelineArtifact@0
+#     inputs:
+#       artifactName: '$(Agent.OS)_$(python.architecture)'
+#       targetPath: 'dist'
   
-- job: win64
-  pool:
-    vmImage: "windows-2019"
+# - job: win64
+#   pool:
+#     vmImage: "windows-2019"
     
-  steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: "3.7"
-      architecture: "x64"
+#   steps:
+#   - task: UsePythonVersion@0
+#     inputs:
+#       versionSpec: "3.7"
+#       architecture: "x64"
 
-  - script: |
-      python -m pip install --upgrade pip setuptools
-      python -m pip install wheel
-    displayName: 'Install dependencies'
+#   - script: |
+#       python -m pip install --upgrade pip setuptools
+#       python -m pip install wheel
+#     displayName: 'Install dependencies'
 
-  - script: |
-      python setup.py bdist_wheel
-    displayName: 'Build wheels'
+#   - script: |
+#       python setup.py bdist_wheel
+#     displayName: 'Build wheels'
 
-  - task: PublishPipelineArtifact@0
-    inputs:
-      artifactName: '$(Agent.OS)_$(Agent.JobName)_x64'
-      targetPath: 'dist'
+#   - task: PublishPipelineArtifact@0
+#     inputs:
+#       artifactName: '$(Agent.OS)_$(Agent.JobName)_x64'
+#       targetPath: 'dist'
 
 - job: win32
   pool: 
     vmImage: "windows-2019"
   
   steps:
-    - task: UsePythonVersion@0
-      inputs:
-        versionSpec: "3.7"
-        architecture: "x86"
-
     - script: |
         git clone https://github.com/msys2/msys2-ci-base.git %CD:~0,2%\msys64
         %CD:~0,2%\msys64\usr\bin\rm -rf %CD:~0,2%\msys64\.git
@@ -117,6 +112,31 @@ jobs:
         %CD:~0,2%\msys64\usr\bin\pacman --noconfirm -Scc
         %CD:~0,2%\msys64\usr\bin\sed -i "s|#CacheDir.*|CacheDir=/c/Users/%USERNAME%/AppData/Local/Temp|g" /etc/pacman.conf
       displayName: Install Toolchain
+
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: "3.7"
+        architecture: "x86"
+      displayName: "Set Python version to 3.7"
+
+    - script: |
+        python -m pip install --upgrade pip setuptools
+        python -m pip install wheel
+      displayName: 'Install Python dependencies'
+    
+    - script: |
+        set PATH=%CD:~0,2%\msys64\mingw32\bin;%PATH%
+        set GOARCH=386
+        set CGO_ENABLED=1
+        del %CD:~0,2%\msys64\mingw32\bin\python.exe
+        python setup.py bdist_wheel
+      displayName: Build wheel
+
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: "3.8"
+        architecture: "x86"
+      displayName: "Set Python version to 3.8"
 
     - script: |
         python -m pip install --upgrade pip setuptools
