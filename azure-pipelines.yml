@@ -115,14 +115,8 @@ jobs:
         $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm --needed -S base-devel mingw-w64-i686-toolchain
         $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Scc
         $(System.DefaultWorkingDirectory)\msys64\usr\bin\sed -i "s|#CacheDir.*|CacheDir=/c/Users/%USERNAME%/AppData/Local/Temp|g" /etc/pacman.conf
-      displayName: Install Toolchain
-
-    - script:
-        set PATH=$(System.DefaultWorkingDirectory)\msys64\mingw32\bin;%PATH%
-        set GOARCH=386
-        set CGO_ENABLED=1
         del $(System.DefaultWorkingDirectory)\msys64\mingw32\bin\python.exe
-      displayName: Setup build environment
+      displayName: Install Toolchain
 
     - task: UsePythonVersion@0
       inputs:
