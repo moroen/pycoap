@@ -41,10 +41,13 @@ jobs:
       matrix:
         Python35:
           python.version: '3.5'
+          python.architecture: 'x64'
         Python36:
           python.version: '3.6'
+          python.architecture: "x64"
         Python37:
           python.version: '3.7'
+          python.architecture: "x64"
 
     pool:
       vmImage: "ubuntu-latest"
@@ -53,7 +56,7 @@ jobs:
     - task: UsePythonVersion@0
       inputs:
         versionSpec: '$(python.version)'
-        architecture: 'x64'
+        architecture: '$(python.architecture)'
       displayName: 'Use Python $(python.version)'
 
     - script: |
@@ -67,7 +70,7 @@ jobs:
 
     - task: PublishPipelineArtifact@0
       inputs:
-        artifactName: '$(Agent.OS)_$(python.architecture)'
+        artifactName: '$(Agent.OS)_$(python.version)_$(python.architecture)'
         targetPath: 'dist'
   
   - job: win64
