@@ -12,64 +12,62 @@ trigger:
 pr: none
 
 jobs:
-# - job: source
-#   pool:
-#     vmImage: 'ubuntu-latest'
+ - job: source
+   pool:
+     vmImage: 'ubuntu-latest'
 
-#   steps:
-#   - task: UsePythonVersion@0
-#     inputs:
-#       versionSpec: '3.7'
-#     displayName: 'Use python 3.7'
+   steps:
+   - task: UsePythonVersion@0
+     inputs:
+       versionSpec: '3.7'
+     displayName: 'Use python 3.7'
 
-#   - script: |
-#       python -m pip install --upgrade pip setuptools
-#       python -m pip install wheel
-#     displayName: 'Install dependencies'
+   - script: |
+       python -m pip install --upgrade pip setuptools
+       python -m pip install wheel
+     displayName: 'Install dependencies'
 
-#   - script: |
-#       python setup.py sdist
-#     displayName: 'Build source wheel'
-#   - task: PublishPipelineArtifact@0
-#     inputs:
-#       artifactName: 'source'
-#       targetPath: 'dist'
+   - script: |
+       python setup.py sdist
+     displayName: 'Build source wheel'
+   - task: PublishPipelineArtifact@0
+     inputs:
+       artifactName: 'source'
+       targetPath: 'dist'
 
-# - job: nix
-#   strategy:
-#     matrix:
-#       linux:
-#         imageName: 'ubuntu-latest'
-#         python.version: '3.7'
-#         python.architecture: 'x64'
-#       mac:
-#         imageName: 'macos-10.13'
-#         python.version: '3.7'
-#         python.architecture: 'x64'
+  - job: Linux
+    strategy:
+      matrix:
+        Python35:
+          python.version: '3.5'
+        Python36:
+          python.version: '3.6'
+        Python36:
+          python.version: '3.6'
 
-#   pool:
-#     vmImage: $(imageName)
+    pool:
+      vmImage: "ubuntu-latest"
 
-#   steps:
-#   - task: UsePythonVersion@0
-#     inputs:
-#       versionSpec: '$(python.version)'
-#       architecture: '$(python.architecture)'
-#     displayName: 'Use Python $(python.version) - $(python.architecture)'
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(python.version)'
+        architecture: 'x64'
+      displayName: 'Use Python $(python.version)'
 
-#   - script: |
-#       python -m pip install --upgrade pip setuptools
-#       python -m pip install wheel
-#     displayName: 'Install dependencies'
+    - script: |
+        python -m pip install --upgrade pip setuptools
+        python -m pip install wheel
+      displayName: 'Install dependencies'
 
-#   - script: |
-#       python setup.py bdist_wheel
-#     displayName: 'Build wheels'
+    - script: |
+        python setup.py bdist_wheel
+      displayName: 'Build wheels'
 
-#   - task: PublishPipelineArtifact@0
-#     inputs:
-#       artifactName: '$(Agent.OS)_$(python.architecture)'
-#       targetPath: 'dist'
+    - task: PublishPipelineArtifact@0
+      inputs:
+        artifactName: '$(Agent.OS)_$(python.architecture)'
+        targetPath: 'dist'
   
 # - job: win64
 #   pool:
