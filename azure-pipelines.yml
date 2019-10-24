@@ -12,9 +12,9 @@ trigger:
 pr: none
 
 jobs:
- - job: source
-   pool:
-     vmImage: 'ubuntu-latest'
+  - job: source
+    pool:
+      vmImage: 'ubuntu-latest'
 
    steps:
    - task: UsePythonVersion@0
