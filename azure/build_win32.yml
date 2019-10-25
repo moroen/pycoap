@@ -20,7 +20,7 @@ steps:
     architecture: 'x86'
   displayName: "Set Python version to 3.5"
 
-- template: azure/build_python.yml
+- template: build_python.yml
 
 - task: UsePythonVersion@0
   inputs:
@@ -28,7 +28,7 @@ steps:
     architecture: 'x86'
   displayName: "Set Python version to 3.6"
 
-- template: azure/build_python.yml
+- template: build_python.yml
 
 - task: UsePythonVersion@0
   inputs:
@@ -36,7 +36,7 @@ steps:
     architecture: 'x86'
   displayName: "Set Python version to 3.7"
 
-- template: azure/build_python.yml
+- template: build_python.yml
 
 - task: PublishPipelineArtifact@0
   inputs:
