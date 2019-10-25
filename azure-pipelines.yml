@@ -13,5 +13,9 @@ pr: none
 
 jobs:
   - job: source
-  - template: azure/build_source.yml
+    pool:
+      vmImage: 'ubuntu-latest'
+
+    steps:    
+    - template: azure/build_source.yml
   
