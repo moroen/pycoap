@@ -1,0 +1,37 @@
+jobs:
+- job: ManyLinux
+  variables:
+    package_name: 'pycoap'
+
+  strategy:
+    matrix:
+      64Bit2010:
+        arch: x86_64
+        plat: manylinux2010_x86_64
+        image: quay.io/pypa/manylinux2010_x86_64
+        python.architecture: x64
+#      64Bit:
+#        arch: x86_64
+#        plat: manylinux1_x86_64
+#        image: quay.io/pypa/manylinux1_x86_64
+#        python.architecture: x64
+#      32Bit:
+#        arch: i686
+#        plat: manylinux1_i686
+#        image: quay.io/pypa/manylinux1_i686
+#        python.architecture: x86
+  pool:
+    vmImage: 'ubuntu-16.04'
+  steps:
+    - script: |
+        set -ex
+        docker run -e PLAT=$(plat) -e package_name=$(package_name) --rm -v `pwd`:/io $(image) /io/azure/build_wheels.sh
+        ls -lh wheelhouse/
+        mkdir -p dist
+        cp wheelhouse/$(package_name)*.whl dist/.
+      displayName: Build wheels
+
+    - task: PublishPipelineArtifact@0
+      inputs:
+        artifactName: 'artifact_$(Agent.OS)_$(Agent.JobName)_$(python.architecture)'
+        targetPath: 'dist'
