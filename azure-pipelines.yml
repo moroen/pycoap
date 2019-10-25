@@ -12,25 +12,7 @@ trigger:
 pr: none
 
 jobs:
-  # - job: source
-  #   pool:
-  #     vmImage: 'ubuntu-latest'
-
-  #   steps:    
-  #   - template: azure/build_source.yml
-  
-  # - job:  win64
-  #   pool:
-  #     vmImage: "windows-2019"
-
-  #   steps:
-  #   - template: azure/build_win64.yml
-
-  # - job:  win32
-  #   pool:
-  #     vmImage: "windows-2019"
-
-  #   steps:
-  #   - template: azure/build_win32.yml
-
-- template: azure/build_manylinux.yml
+  #- template: azure/build_source.yml
+  #- template: azure/build_win64.yml
+  #- template: azure/build_win32.yml
+  - template: azure/build_manylinux.yml
