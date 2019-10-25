@@ -16,5 +16,5 @@ steps:
 - task: PublishPipelineArtifact@0
   inputs:
     artifactName: 'source'
-    targetPath: 'dist
+    targetPath: 'dist'
   displayName: 'Publish artifacts'
