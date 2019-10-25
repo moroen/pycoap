@@ -1,20 +1,25 @@
-steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '3.7'
-  displayName: 'Use python 3.7'
+jobs:
+  - job: source
+    pool:
+      vmImage: 'ubuntu-latest'
 
-- script: |
-    python -m pip install --upgrade pip setuptools
-    python -m pip install wheel
-  displayName: 'Install dependencies'
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.7'
+      displayName: 'Use python 3.7'
 
-- script: |
-    python setup.py sdist
-  displayName: 'Build source wheel'
+    - script: |
+        python -m pip install --upgrade pip setuptools
+        python -m pip install wheel
+      displayName: 'Install dependencies'
 
-- task: PublishPipelineArtifact@0
-  inputs:
-    artifactName: 'source'
-    targetPath: 'dist'
-  displayName: 'Publish artifacts'
+    - script: |
+        python setup.py sdist
+      displayName: 'Build source wheel'
+
+    - task: PublishPipelineArtifact@0
+      inputs:
+        artifactName: 'source'
+        targetPath: 'dist'
+      displayName: 'Publish artifacts'
