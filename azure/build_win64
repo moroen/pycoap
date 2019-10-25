@@ -1,6 +1,3 @@
-pool:
-  vmImage: "windows-2019"
-
 steps:
 - task: UsePythonVersion@0
   inputs:
@@ -11,9 +8,11 @@ steps:
     python -m pip install --upgrade pip setuptools
     python -m pip install wheel
   displayName: 'Install dependencies'
+
 - script: |
     python setup.py bdist_wheel
   displayName: 'Build wheels'
+
 - task: PublishPipelineArtifact@0
   inputs:
     artifactName: '$(Agent.OS)_$(Agent.JobName)_x64'
