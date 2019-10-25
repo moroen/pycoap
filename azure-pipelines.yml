@@ -3,136 +3,140 @@
 # Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
+variables:
+  CACHE_FOLDER: $(System.DefaultWorkingDirectory)\msys64
+
 trigger:
 - master
 
 pr: none
 
 jobs:
-- job: source
-  pool:
-    vmImage: 'ubuntu-latest'
+  - job: source
+    pool:
+      vmImage: 'ubuntu-latest'
 
-  steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '3.7'
-    displayName: 'Use python 3.7'
-
-  - script: |
-      python -m pip install --upgrade pip setuptools
-      python -m pip install wheel
-    displayName: 'Install dependencies'
-
-  - script: |
-      python setup.py sdist
-    displayName: 'Build source wheel'
-  - task: PublishPipelineArtifact@0
-    inputs:
-      artifactName: 'source'
-      targetPath: 'dist'
-
-- job: nix
-  strategy:
-    matrix:
-      linux:
-        imageName: 'ubuntu-latest'
-        python.version: '3.7'
-        python.architecture: 'x64'
-      mac:
-        imageName: 'macos-10.13'
-        python.version: '3.7'
-        python.architecture: 'x64'
-
-  pool:
-    vmImage: $(imageName)
-
-  steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '$(python.version)'
-      architecture: '$(python.architecture)'
-    displayName: 'Use Python $(python.version) - $(python.architecture)'
-
-  - script: |
-      python -m pip install --upgrade pip setuptools
-      python -m pip install wheel
-    displayName: 'Install dependencies'
-
-  - script: |
-      python setup.py bdist_wheel
-    displayName: 'Build wheels'
-
-  - task: PublishPipelineArtifact@0
-    inputs:
-      artifactName: '$(Agent.OS)_$(python.architecture)'
-      targetPath: 'dist'
-  
-- job: win64
-  pool:
-    vmImage: "windows-2019"
-    
-  steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: "3.7"
-      architecture: "x64"
-
-  - script: |
-      python -m pip install --upgrade pip setuptools
-      python -m pip install wheel
-    displayName: 'Install dependencies'
-
-  - script: |
-      python setup.py bdist_wheel
-    displayName: 'Build wheels'
-
-  - task: PublishPipelineArtifact@0
-    inputs:
-      artifactName: '$(Agent.OS)_$(Agent.JobName)_x64'
-      targetPath: 'dist'
-
-- job: win32
-  pool: 
-    vmImage: "windows-2019"
-  
-  steps:
+    steps:
     - task: UsePythonVersion@0
       inputs:
-        versionSpec: "3.7"
-        architecture: "x86"
-
-    - script: |
-        git clone https://github.com/msys2/msys2-ci-base.git %CD:~0,2%\msys64
-        %CD:~0,2%\msys64\usr\bin\rm -rf %CD:~0,2%\msys64\.git
-      displayName: Install MSYS2
-      
-    - script: |
-        %CD:~0,2%\msys64\usr\bin\pacman --noconfirm -Syyuu
-        %CD:~0,2%\msys64\usr\bin\pacman --noconfirm -Syuu
-      displayName: Update MSYS2
-      
-    - script: |
-        %CD:~0,2%\msys64\usr\bin\pacman --noconfirm --needed -S base-devel mingw-w64-i686-toolchain
-        %CD:~0,2%\msys64\usr\bin\pacman --noconfirm -Scc
-        %CD:~0,2%\msys64\usr\bin\sed -i "s|#CacheDir.*|CacheDir=/c/Users/%USERNAME%/AppData/Local/Temp|g" /etc/pacman.conf
-      displayName: Install Toolchain
+        versionSpec: '3.7'
+      displayName: 'Use python 3.7'
 
     - script: |
         python -m pip install --upgrade pip setuptools
         python -m pip install wheel
-      displayName: 'Install Python dependencies'
+      displayName: 'Install dependencies'
+    - script: |
+        python setup.py sdist
+      displayName: 'Build source wheel'
+   
+    - task: PublishPipelineArtifact@0
+      inputs:
+       artifactName: 'source'
+       targetPath: 'dist'
+
+  - job: Linux
+    strategy:
+      matrix:
+        Python35:
+          python.version: '3.5'
+          python.architecture: 'x64'
+        Python36:
+          python.version: '3.6'
+          python.architecture: "x64"
+        Python37:
+          python.version: '3.7'
+          python.architecture: "x64"
+
+    pool:
+      vmImage: "ubuntu-latest"
+
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(python.version)'
+        architecture: '$(python.architecture)'
+      displayName: 'Use Python $(python.version)'
+
+    - script: |
+        python -m pip install --upgrade pip setuptools
+        python -m pip install wheel
+      displayName: 'Install dependencies'
+    - script: |
+        python setup.py bdist_wheel
+      displayName: 'Build wheels'
+    - task: PublishPipelineArtifact@0
+      inputs:
+        artifactName: '$(Agent.OS)_$(python.version)_$(python.architecture)'
+        targetPath: 'dist'
+  
+  - job: win64
+    pool:
+      vmImage: "windows-2019"
+      
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: "3.7"
+        architecture: "x64"
+
+    - script: |
+        python -m pip install --upgrade pip setuptools
+        python -m pip install wheel
+      displayName: 'Install dependencies'
+    - script: |
+        python setup.py bdist_wheel
+      displayName: 'Build wheels'
+    - task: PublishPipelineArtifact@0
+      inputs:
+        artifactName: '$(Agent.OS)_$(Agent.JobName)_x64'
+        targetPath: 'dist'
+
+  - job: win32
+    pool: 
+      vmImage: "windows-2019"
+  
+    steps:      
+    - script: |
+        git clone https://github.com/msys2/msys2-ci-base.git $(System.DefaultWorkingDirectory)\msys64
+        $(System.DefaultWorkingDirectory)\msys64\usr\bin\rm -rf $(System.DefaultWorkingDirectory)\msys64\.git
+      displayName: Install MSYS2
     
     - script: |
-        set PATH=%CD:~0,2%\msys64\mingw32\bin;%PATH%
-        set GOARCH=386
-        set CGO_ENABLED=1
-        del %CD:~0,2%\msys64\mingw32\bin\python.exe
-        python setup.py bdist_wheel
-      displayName: Build wheel
+        $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syyuu
+        $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syuu
+      displayName: Update MSYS2
+    - script: |
+        $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm --needed -S base-devel mingw-w64-i686-toolchain
+        $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Scc
+        $(System.DefaultWorkingDirectory)\msys64\usr\bin\sed -i "s|#CacheDir.*|CacheDir=/c/Users/%USERNAME%/AppData/Local/Temp|g" /etc/pacman.conf
+        del $(System.DefaultWorkingDirectory)\msys64\mingw32\bin\python.exe
+      displayName: Install Toolchain
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.5'
+        architecture: 'x86'
+      displayName: "Set Python version to 3.5"
+
+    - template: azure/build_python.yml
+
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.6'
+        architecture: 'x86'
+      displayName: "Set Python version to 3.6"
+
+    - template: azure/build_python.yml
+
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.7'
+        architecture: 'x86'
+      displayName: "Set Python version to 3.7"
+
+    - template: azure/build_python.yml
 
     - task: PublishPipelineArtifact@0
       inputs:
-        artifactName: '$(Agent.OS)_$(Agent.JobName)_x86'
+        artifactName: '$(Agent.OS)_$(Agent.JobName)'
         targetPath: 'dist'
-
