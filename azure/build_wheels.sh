@@ -27,3 +27,6 @@ done
 for whl in wheelhouse/$package_name-*.whl; do
     auditwheel repair --plat $PLAT "$whl" -w /io/wheelhouse/
 done
+
+# Remove 2010-wheels
+rm wheelhouse/*2010*
