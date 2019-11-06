@@ -20,5 +20,5 @@ jobs:
 
     - task: PublishPipelineArtifact@0
       inputs:
-        artifactName: '$(Agent.OS)_$(Agent.JobName)'
+        artifactName: 'win64'
         targetPath: 'dist'
