@@ -17,6 +17,7 @@ jobs:
       inputs:
         versionSpec: '$(python.version)'
         architecture: "x64"
+      displayName: 'Use python $(python.version)'
 
     - script: |
         python -m pip install --upgrade pip setuptools
@@ -29,5 +30,5 @@ jobs:
 
     - task: PublishPipelineArtifact@0
       inputs:
-        artifactName: 'macos'
+        artifactName: 'macos_$(python.version)'
         targetPath: 'dist'
