@@ -29,4 +29,4 @@ for whl in wheelhouse/$package_name-*.whl; do
 done
 
 # Remove 2010-wheels
-rm wheelhouse/*2010*
+rm /io/wheelhouse/*2010*

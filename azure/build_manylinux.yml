@@ -33,5 +33,5 @@ jobs:
 
     - task: PublishPipelineArtifact@0
       inputs:
-        artifactName: 'dist'
+        artifactName: 'linux'
         targetPath: 'dist'

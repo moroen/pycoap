@@ -20,6 +20,6 @@ jobs:
 
     - task: PublishPipelineArtifact@0
       inputs:
-        artifactName: 'dist'
+        artifactName: 'source'
         targetPath: 'dist'
       displayName: 'Publish artifacts'
