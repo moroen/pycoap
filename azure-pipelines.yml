@@ -16,4 +16,5 @@ jobs:
   - template: azure/build_win64.yml
   - template: azure/build_win32.yml
   - template: azure/build_manylinux.yml
+  - template: azure/build_macos.yml
   
