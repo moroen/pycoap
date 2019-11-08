@@ -1,13 +1,23 @@
 jobs:
-  - job:  win64
+  - job:  macos
     pool:
       vmImage: "windows-2019"
+    
+    strategy:
+      matrix:
+        Python35:
+          python.version: '3.5'
+        Python36:
+          python.version: '3.6'
+        Python37:
+          python.version: '3.7'
  
     steps:
     - task: UsePythonVersion@0
       inputs:
-        versionSpec: "3.7"
+        versionSpec: '$(python.version)'
         architecture: "x64"
+      displayName: 'Use python $(python.version)'
 
     - script: |
         python -m pip install --upgrade pip setuptools
@@ -16,9 +26,9 @@ jobs:
 
     - script: |
         python setup.py bdist_wheel
-      displayName: 'Build wheels'
+      displayName: 'Build wheel'
 
     - task: PublishPipelineArtifact@0
       inputs:
-        artifactName: 'win64'
+        artifactName: 'win64_$(python.version)'
         targetPath: 'dist'
