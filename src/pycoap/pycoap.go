@@ -47,7 +47,7 @@ func coapRequestDTLS(gateway, uri, ident, key *C.char) *C.char {
 
 	res, err := coap.GetRequest(params)
 	if err != nil {
-		log.Println(err.Error())
+		// log.Println(err.Error())
 		return nil
 	}
 
