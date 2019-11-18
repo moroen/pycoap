@@ -4,6 +4,7 @@
 
 PyObject * sum(PyObject *, PyObject *);
 // PyObject * coapRequest(PyObject *, PyObject *);
+void coapDebugLevel(int *);
 char * coapRequest(char *, char*);
 char * coapPutRequest(char *, char *, char *);
 char * coapRequestDTLS(char *, char*, char *, char *);
@@ -28,6 +29,15 @@ const char * ParseStringArgument(PyObject * args) {
         return NULL;
 
     return s;
+}
+
+PyObject * debugLevel(PyObject *self, PyObject *args) {
+    int *level;
+
+    if (!PyArg_ParseTuple(args, "i", &level))
+        Py_RETURN_NONE;
+
+        coapDebugLevel(level);
 }
 
 PyObject * request(PyObject *self, PyObject *args) {

@@ -1,10 +1,12 @@
 .direnv/
 .eggs/
 .envrc
+.vscode/
 dist/
 build/
 *egg*
 
+pkg/
 wheelhouse/
 
 **/__pycache__/
