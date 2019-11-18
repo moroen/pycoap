@@ -1,1 +1,1 @@
-from .pycoap import Request, GET, PUT, POST
+from .pycoap import Request, setDebugLevel, GET, PUT, POST

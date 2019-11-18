@@ -11,17 +11,18 @@ import (
 	"log"
 	"strconv"
 	"strings"
-
 	coap "github.com/moroen/gocoap"
 )
 
-var _debugLevel *C.int
+var _debugLevel int
 
 // Python Functions
 
 //export coapDebugLevel
-func coapDebugLevel(level *C.int) {
-	_debugLevel = level
+func coapDebugLevel(level C.int) C.int {
+
+	_debugLevel = int(level)
+	return level
 }
 
 //export coapRequest
@@ -54,7 +55,7 @@ func coapRequestDTLS(gateway, uri, ident, key *C.char) *C.char {
 
 	res, err := coap.GetRequest(params)
 	if err != nil {
-		if *_debugLevel == 1 {
+		if _debugLevel == 1 {
 			log.Println(err.Error())
 		}
 		return nil
@@ -89,7 +90,7 @@ func coapPutRequestDTLS(gateway, uri, ident, key, payload *C.char) *C.char {
 
 	res, err := coap.PutRequest(params)
 	if err != nil {
-		if *_debugLevel == 1 {
+		if _debugLevel == 1 {
 			log.Println(err.Error())
 		}
 		return nil
@@ -110,7 +111,7 @@ func coapPostRequestDTLS(gateway, uri, ident, key, payload *C.char) *C.char {
 
 	res, err := coap.PostRequest(params)
 	if err != nil {
-		if *_debugLevel == 1 {
+		if _debugLevel == 1 {
 			log.Println(err.Error())
 		}
 		return nil

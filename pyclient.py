@@ -10,7 +10,7 @@ parser.add_argument("payload", nargs="?")
 parser.add_argument("--ident")
 parser.add_argument("--key")
 parser.add_argument("--method", default="PUT")
-
+parser.add_argument("-debug", action="store_true")
 
 class MalformedURI(Exception):
     pass
@@ -31,6 +31,11 @@ def select_method(method):
 if __name__ == "__main__":
     result = None
     args = parser.parse_args()
+
+    print(args)
+
+    if args.debug:
+        pycoap.setDebugLevel(1)
 
     fullUri = args.uri
 

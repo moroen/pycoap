@@ -5,6 +5,9 @@ PUT = 1
 POST = 2
 
 
+def setDebugLevel(level):
+    _pycoap.DebugLevel(level)
+
 def Request(uri, payload=None, method=GET, ident=None, key=None):
     if (payload is None) and (ident is None):
         print("Coap-request")

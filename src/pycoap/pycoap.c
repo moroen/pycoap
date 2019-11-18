@@ -4,7 +4,7 @@
 
 PyObject * sum(PyObject *, PyObject *);
 // PyObject * coapRequest(PyObject *, PyObject *);
-void coapDebugLevel(int *);
+int coapDebugLevel(int);
 char * coapRequest(char *, char*);
 char * coapPutRequest(char *, char *, char *);
 char * coapRequestDTLS(char *, char*, char *, char *);
@@ -33,11 +33,18 @@ const char * ParseStringArgument(PyObject * args) {
 
 PyObject * debugLevel(PyObject *self, PyObject *args) {
     int *level;
+    int res;
+
+    // printf("Testing");
 
     if (!PyArg_ParseTuple(args, "i", &level))
         Py_RETURN_NONE;
 
-        coapDebugLevel(level);
+    // printf("Level: %i", level);
+
+    res = coapDebugLevel((int)level);
+    
+    return PyLong_FromLong(res);
 }
 
 PyObject * request(PyObject *self, PyObject *args) {
@@ -109,6 +116,7 @@ PyObject * postRequestDTLS(PyObject *self, PyObject *args) {
 }
 
 static PyMethodDef CoapMethods[] = {
+    {"DebugLevel", debugLevel, METH_VARARGS, "Make a COAP Request."},
     {"Request", request, METH_VARARGS, "Make a COAP Request."},
     {"PutRequest", putRequest, METH_VARARGS, "Make a COAP Put Request."},
     {"DTLSRequest", requestDTLS, METH_VARARGS, "Make a COAP GET Request."},
