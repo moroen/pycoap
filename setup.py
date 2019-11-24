@@ -4,8 +4,8 @@ from setuptools import setup
 
 setup(
     name="pycoap",
-    description="A low level extension for COAP/COAPS-requests",
-    url="https://github.com/moroen/python-coap-module",
+    description="A GOLANG python extension for COAP/COAPS-requests",
+    url="https://github.com/moroen/pycoap",
     version="0.4.0",
     author="moroen",
     author_email="no@email.com",

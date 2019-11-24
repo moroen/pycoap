@@ -27,19 +27,22 @@ func coapDebugLevel(level C.int) C.int {
 
 //export coapRequest
 func coapRequest(gateway, uri *C.char) *C.char {
-	/*
-		param := coap.RequestParams{Host: }
+	gw := strings.Split(C.GoString(gateway), ":")
+	port, err := strconv.Atoi(gw[1])
+	if err != nil {
+		panic(err.Error())
+	}
 
-
-		msg, err := GetRequest(C.GoString(gateway), C.GoString(uri))
-		if err != nil {
-			fmt.Println(err.Error())
-			return nil
+	params := coap.RequestParams{Host: gw[0], Port: port, Uri: C.GoString(uri)}
+	res, err := coap.GetRequest(params)
+	if err != nil {
+		if _debugLevel == 1 {
+			log.Println(err.Error())
 		}
-		// return C.PyUnicode_FromString(C.CString(msg.String()))
-		return C.CString(msg.String())
-	*/
-	return nil
+		return nil
+	}
+
+	return C.CString(string(res))
 }
 
 //export coapRequestDTLS

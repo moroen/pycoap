@@ -8,27 +8,19 @@ POST = 2
 def setDebugLevel(level):
     _pycoap.DebugLevel(level)
 
+
 def Request(uri, payload=None, method=GET, ident=None, key=None):
+    uri = uri.split("/")
+    host = uri[2]
+    dest = "/".join(uri[3:])
+
     if (payload is None) and (ident is None):
-        print("Coap-request")
-        return
+        return _pycoap.Request(host, dest)
 
     if (payload is None) and (ident is not None):
-
-        uri = uri.split("/")
-
-        host = uri[2]
-
-        dest = "/".join(uri[3:])
-
-        result = _pycoap.DTLSRequest(host, dest, ident, key)
-        return result
+        return _pycoap.DTLSRequest(host, dest, ident, key)
 
     if (payload is not None) and (ident is not None):
-        uri = uri.split("/")
-        host = uri[2]
-        dest = "/".join(uri[3:])
-
         if method == GET:
             method = PUT
 
