@@ -8,14 +8,6 @@ A python extension module written in GOLANG to provide basic COAP-capabilities, 
 ## Requirements
 To  compile and install PyCOAP you need:
 
-### openssl
-On debian-based distros:
-
-
-```shell
-  $ sudo apt install libssl-dev
-```
-
 ### golang-compiler
 
 ```shell
