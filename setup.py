@@ -6,7 +6,7 @@ setup(
     name="pycoap",
     description="A GOLANG python extension for COAP/COAPS-requests",
     url="https://github.com/moroen/pycoap",
-    version="0.5.0",
+    version="0.5.1",
     author="moroen",
     author_email="no@email.com",
     classifiers=[
