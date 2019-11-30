@@ -121,7 +121,25 @@ func coapPostRequestDTLS(gateway, uri, ident, key, payload *C.char) *C.char {
 		return nil
 	}
 
-	return C.CString(validateResponse(response))
+	return C.CString(stripCtlAndExtFromUTF8(string(response)))
+}
+
+func stripCtlFromUTF8(str string) string {
+	return strings.Map(func(r rune) rune {
+		if r >= 32 && r != 127 {
+			return r
+		}
+		return -1
+	}, str)
+}
+
+func stripCtlAndExtFromUTF8(str string) string {
+	return strings.Map(func(r rune) rune {
+		if r >= 32 && r < 127 {
+			return r
+		}
+		return -1
+	}, str)
 }
 
 func validateResponse(response []byte) (string) {
