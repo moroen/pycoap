@@ -1,16 +1,9 @@
 #define Py_LIMITED_API
-#include <Python.h>
+#include "pycoap.h"
 #include <stdio.h>
 
 PyObject * sum(PyObject *, PyObject *);
 // PyObject * coapRequest(PyObject *, PyObject *);
-int coapDebugLevel(int);
-char * coapRequest(char *, char*);
-char * coapPutRequest(char *, char *, char *);
-char * coapRequestDTLS(char *, char*, char *, char *);
-char * coapPutRequestDTLS(char *, char *, char *, char *, char *);
-char * coapPostRequestDTLS(char *, char *, char *, char *, char *);
-
 
 // Workaround missing variadic function support
 // https://github.com/golang/go/issues/975
@@ -75,16 +68,23 @@ PyObject * putRequest(PyObject *self, PyObject *args) {
 }
 
 PyObject * requestDTLS(PyObject *self, PyObject *args) {
-    char *gateway, *uri, *ident, *key, *res;
+    char *gateway, *uri, *ident, *key;
 
     if (!PyArg_ParseTuple(args, "ssss", &gateway, &uri, &ident, &key))
         Py_RETURN_NONE;
     
-    res = coapRequestDTLS(gateway, uri, ident, key);
-    if (!res)
+    coapresult res = coapRequestDTLS(gateway, uri, ident, key);
+
+    if (res.error != 0) {
+        raiseError(res.error);
+        // Py_RETURN_NONE;
+        return NULL;
+    }
+
+    if (!res.result)
         Py_RETURN_NONE;
 
-    return PyUnicode_FromString(res);
+    return PyUnicode_FromString(res.result);
 }
 
 PyObject * putRequestDTLS(PyObject *self, PyObject *args) {
@@ -94,6 +94,7 @@ PyObject * putRequestDTLS(PyObject *self, PyObject *args) {
         Py_RETURN_NONE;
 
     res = coapPutRequestDTLS(gateway, uri, ident, key, payload);
+
     if (!res)
         Py_RETURN_NONE;
 
@@ -115,7 +116,26 @@ PyObject * postRequestDTLS(PyObject *self, PyObject *args) {
     
 }
 
+PyObject * doTest(PyObject *self, PyObject *args) {
+    /*
+    char *gateway, *uri, *ident, *key, *payload, *res;
+
+    if (!PyArg_ParseTuple(args, "sssss", &gateway, &uri, &payload, &ident, &key))
+        Py_RETURN_NONE;
+
+    res = coapPostRequestDTLS(gateway, uri, ident, key, payload);
+    if (!res)
+        Py_RETURN_NONE;
+
+    return PyUnicode_FromString(res);
+    */
+    // PyErr_SetString(PyExc_ValueError, "String length must be greater than 10");
+    raiseError(2);
+    return NULL;
+}
+
 static PyMethodDef CoapMethods[] = {
+    {"DoTest", doTest, METH_VARARGS, "Run a test."},
     {"DebugLevel", debugLevel, METH_VARARGS, "Make a COAP Request."},
     {"Request", request, METH_VARARGS, "Make a COAP Request."},
     {"PutRequest", putRequest, METH_VARARGS, "Make a COAP Put Request."},
@@ -132,6 +152,27 @@ static struct PyModuleDef coapmodule = {
 PyMODINIT_FUNC  
 PyInit__pycoap(void)  
 {
-    return PyModule_Create(&coapmodule);
+    PyObject *module = PyModule_Create(&coapmodule);
+
+    // Custom Errors
+    UriNotFoundError=PyErr_NewException("_pycoap.UriNotFoundError", NULL, NULL);
+    HandshakeError=PyErr_NewException("_pycoap.HandshakeError", NULL, NULL);
+
+
+    PyModule_AddObject(module, "UriNotFoundError", UriNotFoundError);
+    PyModule_AddObject(module, "HandshakeError", HandshakeError);
+
+    return module;
 }
+
+void raiseError(int e) {
+    switch(e) {
+        case 10: PyErr_SetString(PyExc_ValueError, "String length must be greater than 10");
+                break;
+        case error_urinotfound: PyErr_SetString(UriNotFoundError, "Uri not found");
+                break;
+        case error_handshake: PyErr_SetString(HandshakeError, "DTLS Error: Handshake timeout");
+    }
+}
+
 
