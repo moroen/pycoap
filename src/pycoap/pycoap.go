@@ -34,12 +34,13 @@ func handleError(err error) C.int {
 			return C.error_urinotfound
 		case coap.ErrorHandshake:
 			return C.error_handshake
+		case coap.MethodNotAllowed:
+			return C.error_notallowed
 		}
 		return C.int(0)
 	} else {
 		return C.int(0)
 	}
-
 }
 
 //export coapDebugLevel
@@ -50,7 +51,9 @@ func coapDebugLevel(level C.int) C.int {
 }
 
 //export coapRequest
-func coapRequest(gateway, uri *C.char) *C.char {
+func coapRequest(gateway, uri *C.char) C.coapresult {
+	var res C.coapresult
+
 	gw := strings.Split(C.GoString(gateway), ":")
 	port, err := strconv.Atoi(gw[1])
 	if err != nil {
@@ -58,15 +61,12 @@ func coapRequest(gateway, uri *C.char) *C.char {
 	}
 
 	params := coap.RequestParams{Host: gw[0], Port: port, Uri: C.GoString(uri)}
-	response, err := coap.GetRequest(params)
-	if err != nil {
-		if _debugLevel == 1 {
-			log.Println(err.Error())
-		}
-		return nil
-	}
 
-	return C.CString(validateResponse(response))
+	response, err := coap.GetRequest(params)
+
+	res.result, res.error = C.CString(validateResponse(response)), handleError(err)
+
+	return res
 }
 
 //export coapRequestDTLS
@@ -85,12 +85,12 @@ func coapRequestDTLS(gateway, uri, ident, key *C.char) C.coapresult {
 
 	res.result, res.error = C.CString(validateResponse(response)), handleError(err)
 
-	// res.result = C.CString(validateResponse(response))
-	return res 
+	return res
 }
 
 //export coapPutRequest
-func coapPutRequest(gateway, uri, payload *C.char) *C.char {
+func coapPutRequest(gateway, uri, payload *C.char) C.coapresult {
+	var res C.coapresult
 	/*
 		msg, err := PutRequest(C.GoString(gateway), C.GoString(uri), C.GoString(payload))
 		if err != nil {
@@ -100,11 +100,13 @@ func coapPutRequest(gateway, uri, payload *C.char) *C.char {
 
 		return C.CString(msg.String())
 	*/
-	return nil
+	return res
 }
 
 //export coapPutRequestDTLS
-func coapPutRequestDTLS(gateway, uri, ident, key, payload *C.char) *C.char {
+func coapPutRequestDTLS(gateway, uri, ident, key, payload *C.char) C.coapresult {
+	var res C.coapresult
+
 	gw := strings.Split(C.GoString(gateway), ":")
 	port, err := strconv.Atoi(gw[1])
 	if err != nil {
@@ -114,18 +116,16 @@ func coapPutRequestDTLS(gateway, uri, ident, key, payload *C.char) *C.char {
 	params := coap.RequestParams{Host: gw[0], Port: port, Uri: C.GoString(uri), Id: C.GoString(ident), Key: C.GoString(key), Payload: C.GoString(payload)}
 
 	response, err := coap.PutRequest(params)
-	if err != nil {
-		if _debugLevel == 1 {
-			log.Println(err.Error())
-		}
-		return nil
-	}
 
-	return C.CString(validateResponse(response))
+	res.result, res.error = C.CString(validateResponse(response)), handleError(err)
+
+	return res
 }
 
 //export coapPostRequestDTLS
-func coapPostRequestDTLS(gateway, uri, ident, key, payload *C.char) *C.char {
+func coapPostRequestDTLS(gateway, uri, ident, key, payload *C.char) C.coapresult {
+	var res C.coapresult
+
 	gw := strings.Split(C.GoString(gateway), ":")
 	port, err := strconv.Atoi(gw[1])
 	if err != nil {
@@ -135,14 +135,10 @@ func coapPostRequestDTLS(gateway, uri, ident, key, payload *C.char) *C.char {
 	params := coap.RequestParams{Host: gw[0], Port: port, Uri: C.GoString(uri), Id: C.GoString(ident), Key: C.GoString(key), Payload: C.GoString(payload)}
 
 	response, err := coap.PostRequest(params)
-	if err != nil {
-		if _debugLevel == 1 {
-			log.Println(err.Error())
-		}
-		return nil
-	}
 
-	return C.CString(stripCtlAndExtFromUTF8(string(response)))
+	res.result, res.error = C.CString(validateResponse(response)), handleError(err)
+
+	return res
 }
 
 func stripCtlFromUTF8(str string) string {

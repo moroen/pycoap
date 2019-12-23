@@ -41,29 +41,43 @@ PyObject * debugLevel(PyObject *self, PyObject *args) {
 }
 
 PyObject * request(PyObject *self, PyObject *args) {
-    char *gateway, *uri, *res;
+    char *gateway, *uri;
 
     if (!PyArg_ParseTuple(args, "ss", &gateway, &uri))
         Py_RETURN_NONE;
     
-    res = coapRequest(gateway, uri);
-    if (!res)
+    coapresult res = coapRequest(gateway, uri);
+
+    if (res.error != 0) {
+        raiseError(res.error);
+        // Py_RETURN_NONE;
+        return NULL;
+    }
+
+    if (!res.result)
         Py_RETURN_NONE;
 
-    return PyUnicode_FromString(res);
+    return PyUnicode_FromString(res.result);
 }
 
 PyObject * putRequest(PyObject *self, PyObject *args) {
-    char *gateway, *uri, *payload, *res;
+    char *gateway, *uri, *payload;
 
     if (!PyArg_ParseTuple(args, "sss", &gateway, &uri, &payload))
         Py_RETURN_NONE;
 
-    res = coapPutRequest(gateway, uri, payload);
-    if (!res)
+    coapresult res = coapPutRequest(gateway, uri, payload);
+    
+    if (res.error != 0) {
+        raiseError(res.error);
+        // Py_RETURN_NONE;
+        return NULL;
+    }
+
+    if (!res.result)
         Py_RETURN_NONE;
 
-    return PyUnicode_FromString(res);
+    return PyUnicode_FromString(res.result);
     
 }
 
@@ -88,32 +102,44 @@ PyObject * requestDTLS(PyObject *self, PyObject *args) {
 }
 
 PyObject * putRequestDTLS(PyObject *self, PyObject *args) {
-    char *gateway, *uri, *ident, *key, *payload, *res;
+    char *gateway, *uri, *ident, *key, *payload;
 
     if (!PyArg_ParseTuple(args, "sssss", &gateway, &uri, &payload, &ident, &key))
         Py_RETURN_NONE;
 
-    res = coapPutRequestDTLS(gateway, uri, ident, key, payload);
+    coapresult res = coapPutRequestDTLS(gateway, uri, ident, key, payload);
 
-    if (!res)
+    if (res.error != 0) {
+        raiseError(res.error);
+        // Py_RETURN_NONE;
+        return NULL;
+    }
+
+    if (!res.result)
         Py_RETURN_NONE;
 
-    return PyUnicode_FromString(res);
+    return PyUnicode_FromString(res.result);
     
 }
 
 PyObject * postRequestDTLS(PyObject *self, PyObject *args) {
-    char *gateway, *uri, *ident, *key, *payload, *res;
+    char *gateway, *uri, *ident, *key, *payload; 
 
     if (!PyArg_ParseTuple(args, "sssss", &gateway, &uri, &payload, &ident, &key))
         Py_RETURN_NONE;
 
-    res = coapPostRequestDTLS(gateway, uri, ident, key, payload);
-    if (!res)
+    coapresult res = coapPostRequestDTLS(gateway, uri, ident, key, payload);
+    
+    if (res.error != 0) {
+        raiseError(res.error);
+        // Py_RETURN_NONE;
+        return NULL;
+    }
+
+    if (!res.result)
         Py_RETURN_NONE;
 
-    return PyUnicode_FromString(res);
-    
+    return PyUnicode_FromString(res.result);
 }
 
 PyObject * doTest(PyObject *self, PyObject *args) {
@@ -157,21 +183,26 @@ PyInit__pycoap(void)
     // Custom Errors
     UriNotFoundError=PyErr_NewException("_pycoap.UriNotFoundError", NULL, NULL);
     HandshakeError=PyErr_NewException("_pycoap.HandshakeError", NULL, NULL);
+    MethodNotAllowedError=PyErr_NewException("_pycoap.MethodNotAllowedError", NULL, NULL);
 
 
     PyModule_AddObject(module, "UriNotFoundError", UriNotFoundError);
     PyModule_AddObject(module, "HandshakeError", HandshakeError);
-
+    PyModule_AddObject(module, "MethodNotAllowedError", MethodNotAllowedError);
+    
     return module;
 }
 
 void raiseError(int e) {
     switch(e) {
         case 10: PyErr_SetString(PyExc_ValueError, "String length must be greater than 10");
-                break;
+            break;
         case error_urinotfound: PyErr_SetString(UriNotFoundError, "Uri not found");
-                break;
+            break;
         case error_handshake: PyErr_SetString(HandshakeError, "DTLS Error: Handshake timeout");
+            break;
+        case error_notallowed: PyErr_SetString(MethodNotAllowedError, "COAP Error: Method not allowed");
+            break;
     }
 }
 
