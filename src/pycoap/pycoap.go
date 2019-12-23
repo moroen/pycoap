@@ -1,12 +1,7 @@
 package main
 
 /*
-#cgo pkg-config: python3
-#define Py_LIMITED_API
 #include "pycoap.h"
-int PyArg_ParseTuple_LL(PyObject *, long long *, long long *);
-int PyArg_ParseTuple_S(PyObject *, char *);
-char * ParseStringArgument(PyObject *);
 */
 import "C"
 
