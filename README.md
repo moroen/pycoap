@@ -8,21 +8,10 @@ A python extension module written in GOLANG to provide basic COAP-capabilities, 
 ## Requirements
 To  compile and install PyCOAP you need:
 
-<<<<<<< HEAD
 ### golang-compiler and python developement packages
-=======
-### Python-development libraries, upgraded pip and setuptools
 
 ```shell
-  $ sudo apt install python3 python3-dev python3-pip
-  $ sudo pip3 install -U pip setuptools
-```
-
-### golang-compiler
->>>>>>> 16dbffd06223df57ba50fd710c4079a11f8ac7ff
-
-```shell
-  $ sudo apt install golang python3-dev
+  $ sudo apt install golang python3 python3-dev
 ```
 
 ### Updated pip and setuptools
