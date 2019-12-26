@@ -15,6 +15,7 @@ setup(
         "Programming Language :: Python :: Implementation :: CPython",
     ],
     ext_modules=[Extension("_pycoap", ["src/pycoap/pycoap.go"])],
+    data_files=[('src/pycoap', ['src/pycoap/pycoap.h', 'src/pycoap/pycoap.c'])],
     packages=["pycoap"],
     build_golang={"root": "github.com/moroen/pycoap"},
     setup_requires=["setuptools-golang"],
