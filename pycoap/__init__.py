@@ -1,4 +1,4 @@
 from .pycoap import Request, setDebugLevel, GET, PUT, POST
 # from _pycoap import UriNotFoundError, HandshakeError, MethodNotAllowedError
 
-__version__ = "0.6.2"
+__version__ = "0.6.3"
