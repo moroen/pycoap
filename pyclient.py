@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import pycoap
+from pycoap.errors import HandshakeError
 
 import argparse
 
@@ -76,7 +77,8 @@ if __name__ == "__main__":
 
         if result != None:
             print("Response: {}".format(result))
-
+    except HandshakeError:
+        print("Connection timed out")
     except MissingCredentials:
         print("Error: Missing credentials for DTLS-connection!")
     except MalformedURI:
