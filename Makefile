@@ -7,6 +7,7 @@ develop:
 	python3 setup.py develop
 
 clean:
+	-rm -rf dist
 	-rm -rf build
 	-rm -rf *egg-info
 	-rm *.so
