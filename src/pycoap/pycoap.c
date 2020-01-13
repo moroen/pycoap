@@ -184,11 +184,14 @@ PyInit__pycoap(void)
     UriNotFoundError=PyErr_NewException("_pycoap.UriNotFoundError", NULL, NULL);
     HandshakeError=PyErr_NewException("_pycoap.HandshakeError", NULL, NULL);
     MethodNotAllowedError=PyErr_NewException("_pycoap.MethodNotAllowedError", NULL, NULL);
-
+    ReadTimeoutError=PyErr_NewException("_pycoap.ReadTimeoutError", NULL, NULL);
+    WriteTimeoutError=PyErr_NewException("_pycoap.WriteTimeoutError", NULL, NULL);
 
     PyModule_AddObject(module, "UriNotFoundError", UriNotFoundError);
     PyModule_AddObject(module, "HandshakeError", HandshakeError);
     PyModule_AddObject(module, "MethodNotAllowedError", MethodNotAllowedError);
+    PyModule_AddObject(module, "ReadTimeoutError", ReadTimeoutError);
+    PyModule_AddObject(module, "WriteTimeoutError", WriteTimeoutError);
     
     return module;
 }
@@ -202,6 +205,10 @@ void raiseError(int e) {
         case error_handshake: PyErr_SetString(HandshakeError, "DTLS Error: Handshake timeout");
             break;
         case error_notallowed: PyErr_SetString(MethodNotAllowedError, "COAP Error: Method not allowed");
+            break;
+        case error_writeerror: PyErr_SetString(WriteTimeoutError, "COAP Error: Write timeout");
+            break;
+        case error_readerror: PyErr_SetString(ReadTimeoutError, "COAP Error: Read timeout");
             break;
     }
 }

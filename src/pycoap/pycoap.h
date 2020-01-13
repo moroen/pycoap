@@ -6,6 +6,8 @@
 #define error_urinotfound 1
 #define error_handshake 2
 #define error_notallowed 3
+#define error_readerror 4
+#define error_writeerror 5
 
 struct pycoap_result
 {
@@ -29,6 +31,8 @@ void raiseError(int);
 
 static PyObject *UriNotFoundError = NULL;
 static PyObject *HandshakeError = NULL;
+static PyObject *ReadTimeoutError = NULL;
+static PyObject *WriteTimeoutError = NULL;
 static PyObject *MethodNotAllowedError = NULL;
 
 #endif

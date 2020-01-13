@@ -31,6 +31,10 @@ func handleError(err error) C.int {
 			return C.error_handshake
 		case coap.MethodNotAllowed:
 			return C.error_notallowed
+		case coap.ErrorWriteTimeout:
+			return C.error_writeerror
+		case coap.ErrorReadTimeout:
+			return C.error_readerror
 		}
 		return C.int(0)
 	} else {

@@ -1,4 +1,4 @@
-from _pycoap import UriNotFoundError, HandshakeError, MethodNotAllowedError
+from _pycoap import UriNotFoundError, HandshakeError, MethodNotAllowedError, ReadTimeoutError, WriteTimeoutError
 
 class _baseException(Exception):
     def __init__(self, *args, **kwargs):
