@@ -1,7 +1,7 @@
 package main
 
 /*
-#include "pycoap.h"
+#include "py3coap.h"
 */
 import "C"
 

@@ -1,5 +1,5 @@
 #define Py_LIMITED_API
-#include "pycoap.h"
+#include "py3coap.h"
 #include <stdio.h>
 
 PyObject * sum(PyObject *, PyObject *);
@@ -176,16 +176,16 @@ static struct PyModuleDef coapmodule = {
 };
 
 PyMODINIT_FUNC  
-PyInit__pycoap(void)  
+PyInit__py3coap(void)  
 {
     PyObject *module = PyModule_Create(&coapmodule);
 
     // Custom Errors
-    UriNotFoundError=PyErr_NewException("_pycoap.UriNotFoundError", NULL, NULL);
-    HandshakeError=PyErr_NewException("_pycoap.HandshakeError", NULL, NULL);
-    MethodNotAllowedError=PyErr_NewException("_pycoap.MethodNotAllowedError", NULL, NULL);
-    ReadTimeoutError=PyErr_NewException("_pycoap.ReadTimeoutError", NULL, NULL);
-    WriteTimeoutError=PyErr_NewException("_pycoap.WriteTimeoutError", NULL, NULL);
+    UriNotFoundError=PyErr_NewException("_py3coap.UriNotFoundError", NULL, NULL);
+    HandshakeError=PyErr_NewException("_py3coap.HandshakeError", NULL, NULL);
+    MethodNotAllowedError=PyErr_NewException("_py3coap.MethodNotAllowedError", NULL, NULL);
+    ReadTimeoutError=PyErr_NewException("_py3coap.ReadTimeoutError", NULL, NULL);
+    WriteTimeoutError=PyErr_NewException("_py3coap.WriteTimeoutError", NULL, NULL);
 
     PyModule_AddObject(module, "UriNotFoundError", UriNotFoundError);
     PyModule_AddObject(module, "HandshakeError", HandshakeError);

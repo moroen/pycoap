@@ -3,7 +3,7 @@ from setuptools import setup
 
 
 setup(
-    name="pycoap",
+    name="py3coap",
     description="A GOLANG python extension for COAP/COAPS-requests",
     url="https://github.com/moroen/pycoap",
     version="0.7.0",
@@ -14,9 +14,9 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: Implementation :: CPython",
     ],
-    ext_modules=[Extension("_pycoap", ["src/pycoap/pycoap.go"])],
-    data_files=[('src/pycoap', ['src/pycoap/pycoap.h', 'src/pycoap/pycoap.c'])],
-    packages=["pycoap"],
-    build_golang={"root": "github.com/moroen/pycoap"},
+    ext_modules=[Extension("_py3coap", ["src/py3coap/py3coap.go"])],
+    data_files=[('src/py3coap', ['src/py3coap/py3coap.h', 'src/py3coap/py3coap.c'])],
+    packages=["py3coap"],
+    build_golang={"root": "github.com/moroen/py3coap"},
     setup_requires=["setuptools-golang"],
 )

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import pycoap
-from pycoap.errors import HandshakeError
+import py3coap
+from py3coap.errors import HandshakeError
 
 import argparse
 
@@ -25,9 +25,9 @@ class MissingCredentials(Exception):
 def select_method(method):
     method = method.upper()
 
-    methods = {"GET": pycoap.GET, "PUT": pycoap.PUT, "POST": pycoap.POST}
+    methods = {"GET": py3coap.GET, "PUT": py3coap.PUT, "POST": py3coap.POST}
 
-    return methods.get(method, pycoap.GET)
+    return methods.get(method, py3coap.GET)
 
 
 if __name__ == "__main__":
@@ -35,7 +35,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.debug:
-        pycoap.setDebugLevel(1)
+        py3coap.setDebugLevel(1)
 
     fullUri = args.uri
 
@@ -55,15 +55,15 @@ if __name__ == "__main__":
 
         if uri[0] == "coap:":
             if args.payload != None:
-                result = pycoap.Request(fullUri, args.payload)
+                result = py3coap.Request(fullUri, args.payload)
             else:
-                result = pycoap.Request(fullUri)
+                result = py3coap.Request(fullUri)
 
         if uri[0] == "coaps:":
             if args.ident == None or args.key == None:
                 raise MissingCredentials
             if args.payload != None:
-                result = pycoap.Request(
+                result = py3coap.Request(
                     fullUri,
                     payload=args.payload,
                     method=method,
@@ -71,8 +71,8 @@ if __name__ == "__main__":
                     key=args.key,
                 )
             else:
-                result = pycoap.Request(
-                    fullUri, method=pycoap.GET, ident=args.ident, key=args.key
+                result = py3coap.Request(
+                    fullUri, method=py3coap.GET, ident=args.ident, key=args.key
                 )
 
         if result != None:

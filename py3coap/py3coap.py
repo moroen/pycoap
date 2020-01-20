@@ -1,4 +1,4 @@
-import _pycoap
+import _py3coap
 from .errors import MalformedUri, MissingCredentials
 
 GET = 0
@@ -7,7 +7,7 @@ POST = 2
 
 
 def setDebugLevel(level):
-    _pycoap.DebugLevel(level)
+    _py3coap.DebugLevel(level)
 
 
 def Request(uri, payload=None, method=GET, ident=None, key=None):
@@ -31,28 +31,28 @@ def Request(uri, payload=None, method=GET, ident=None, key=None):
 
     if protocol[0] == "coap:":
         if payload is None:
-            return _pycoap.Request(host, dest)
+            return _py3coap.Request(host, dest)
         else:
             method = PUT if method == GET else method
             if method == PUT:
-                return _pycoap.PutRequest(host, dest, payload)
+                return _py3coap.PutRequest(host, dest, payload)
             elif method == POST:
-                return _pycoap.PostRequest(host, dest, payload)
+                return _py3coap.PostRequest(host, dest, payload)
 
     elif protocol[0] == "coaps:":
         if ident is None or key is None:
             raise MissingCredentials
 
         if payload is None:
-            return _pycoap.DTLSRequest(host, dest, ident, key)
+            return _py3coap.DTLSRequest(host, dest, ident, key)
         else:
             method = PUT if method == GET else method
 
             if method == PUT:
-                result = _pycoap.DTLSPutRequest(host, dest, payload, ident, key)
+                result = _py3coap.DTLSPutRequest(host, dest, payload, ident, key)
                 return result
             elif method == POST:
-                result = _pycoap.DTLSPostRequest(host, dest, payload, ident, key)
+                result = _py3coap.DTLSPostRequest(host, dest, payload, ident, key)
                 return result
 
     else:
