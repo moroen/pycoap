@@ -1,7 +1,7 @@
 jobs:
 - job: ManyLinux
   variables:
-    package_name: 'pycoap'
+    package_name: 'py3coap'
 
   strategy:
     matrix:
