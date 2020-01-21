@@ -29,4 +29,4 @@ To  compile and install PyCOAP you need:
 ```
 
 ## Usage
-See included pyclient.py for a small example
+See included pycoap-client for a small example

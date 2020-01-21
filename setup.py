@@ -19,4 +19,5 @@ setup(
     packages=["py3coap"],
     build_golang={"root": "github.com/moroen/py3coap"},
     setup_requires=["setuptools-golang"],
+    scripts=["pycoap-client"],
 )
