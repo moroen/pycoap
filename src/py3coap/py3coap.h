@@ -8,6 +8,9 @@
 #define error_notallowed 3
 #define error_readerror 4
 #define error_writeerror 5
+#define error_dataerror 6
+#define error_unknownerror 7
+#define error_malformedurierror 8
 
 struct pycoap_result
 {
@@ -34,6 +37,9 @@ static PyObject *HandshakeError = NULL;
 static PyObject *ReadTimeoutError = NULL;
 static PyObject *WriteTimeoutError = NULL;
 static PyObject *MethodNotAllowedError = NULL;
+static PyObject *BadDataError = NULL;
+static PyObject *UnknownError = NULL;
+static PyObject *MalformedUriError = NULL;
 
 #endif
 

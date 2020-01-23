@@ -1,4 +1,4 @@
-from _py3coap import UriNotFoundError, HandshakeError, MethodNotAllowedError, ReadTimeoutError, WriteTimeoutError
+from _py3coap import UriNotFoundError, HandshakeError, MethodNotAllowedError, ReadTimeoutError, WriteTimeoutError, UnknownError, BadDataError
 
 class _baseException(Exception):
     def __init__(self, *args, **kwargs):

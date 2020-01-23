@@ -186,13 +186,19 @@ PyInit__py3coap(void)
     MethodNotAllowedError=PyErr_NewException("_py3coap.MethodNotAllowedError", NULL, NULL);
     ReadTimeoutError=PyErr_NewException("_py3coap.ReadTimeoutError", NULL, NULL);
     WriteTimeoutError=PyErr_NewException("_py3coap.WriteTimeoutError", NULL, NULL);
+    BadDataError=PyErr_NewException("_py3coap.BadDataError", NULL, NULL);
+    UnknownError=PyErr_NewException("_py3coap.UnknownError", NULL, NULL);
+    MalformedUriError=PyErr_NewException("_py3coap.MalformedUriError", NULL, NULL);
 
     PyModule_AddObject(module, "UriNotFoundError", UriNotFoundError);
     PyModule_AddObject(module, "HandshakeError", HandshakeError);
     PyModule_AddObject(module, "MethodNotAllowedError", MethodNotAllowedError);
     PyModule_AddObject(module, "ReadTimeoutError", ReadTimeoutError);
     PyModule_AddObject(module, "WriteTimeoutError", WriteTimeoutError);
-    
+    PyModule_AddObject(module, "BadDataError", BadDataError);
+    PyModule_AddObject(module, "UnknownError", UnknownError);
+    PyModule_AddObject(module, "MalformedUriError", MalformedUriError);
+
     return module;
 }
 
@@ -210,6 +216,11 @@ void raiseError(int e) {
             break;
         case error_readerror: PyErr_SetString(ReadTimeoutError, "COAP Error: Read timeout");
             break;
+        case error_dataerror: PyErr_SetString(BadDataError, "COAP Error: Bad data received");
+            break;
+        case error_unknownerror: PyErr_SetString(UnknownError, "COAP Error: Unknown error");
+            break;
+        case error_malformedurierror: PyErr_SetString(MalformedUriError, "COAP Error: Unknown error");
     }
 }
 

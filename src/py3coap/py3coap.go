@@ -35,11 +35,14 @@ func handleError(err error) C.int {
 			return C.error_writeerror
 		case coap.ErrorReadTimeout:
 			return C.error_readerror
+		case coap.ErrorBadData:
+			return C.error_dataerror
+		case coap.ErrorUnknownError:
+			return C.error_unknownerror
 		}
 		return C.int(0)
-	} else {
-		return C.int(0)
 	}
+	return C.int(0)
 }
 
 //export coapDebugLevel
@@ -56,7 +59,8 @@ func coapRequest(gateway, uri *C.char) C.coapresult {
 	gw := strings.Split(C.GoString(gateway), ":")
 	port, err := strconv.Atoi(gw[1])
 	if err != nil {
-		panic(err.Error())
+		res.result, res.error = C.CString(""), C.error_malformedurierror
+		return res
 	}
 
 	params := coap.RequestParams{Host: gw[0], Port: port, Uri: C.GoString(uri)}
@@ -75,7 +79,8 @@ func coapRequestDTLS(gateway, uri, ident, key *C.char) C.coapresult {
 	gw := strings.Split(C.GoString(gateway), ":")
 	port, err := strconv.Atoi(gw[1])
 	if err != nil {
-		panic(err.Error())
+		res.result, res.error = C.CString(""), C.error_malformedurierror
+		return res
 	}
 
 	params := coap.RequestParams{Host: gw[0], Port: port, Uri: C.GoString(uri), Id: C.GoString(ident), Key: C.GoString(key)}
@@ -109,7 +114,8 @@ func coapPutRequestDTLS(gateway, uri, ident, key, payload *C.char) C.coapresult 
 	gw := strings.Split(C.GoString(gateway), ":")
 	port, err := strconv.Atoi(gw[1])
 	if err != nil {
-		panic(err.Error())
+		res.result, res.error = C.CString(""), C.error_malformedurierror
+		return res
 	}
 
 	params := coap.RequestParams{Host: gw[0], Port: port, Uri: C.GoString(uri), Id: C.GoString(ident), Key: C.GoString(key), Payload: C.GoString(payload)}
@@ -128,7 +134,8 @@ func coapPostRequestDTLS(gateway, uri, ident, key, payload *C.char) C.coapresult
 	gw := strings.Split(C.GoString(gateway), ":")
 	port, err := strconv.Atoi(gw[1])
 	if err != nil {
-		panic(err.Error())
+		res.result, res.error = C.CString(""), C.error_malformedurierror
+		return res
 	}
 
 	params := coap.RequestParams{Host: gw[0], Port: port, Uri: C.GoString(uri), Id: C.GoString(ident), Key: C.GoString(key), Payload: C.GoString(payload)}
