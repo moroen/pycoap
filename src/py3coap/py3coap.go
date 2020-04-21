@@ -11,7 +11,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	coap "github.com/moroen/gocoap"
+	coap "github.com/moroen/gocoap/v2"
 )
 
 var _debugLevel int
