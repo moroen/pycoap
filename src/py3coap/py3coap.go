@@ -11,7 +11,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	coap "github.com/moroen/gocoap"
+	coap "github.com/moroen/gocoap/v3"
 )
 
 var _debugLevel int
@@ -145,6 +145,15 @@ func coapPostRequestDTLS(gateway, uri, ident, key, payload *C.char) C.coapresult
 	res.result, res.error = C.CString(validateResponse(response)), handleError(err)
 
 	return res
+}
+
+//export coapCloseConnection
+func coapCloseConnection() C.int {
+	err := coap.CloseDTLSConnection()
+	if err != nil {
+		return 1
+	}
+	return 0
 }
 
 func stripCtlFromUTF8(str string) string {

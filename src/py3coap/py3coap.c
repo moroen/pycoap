@@ -40,6 +40,14 @@ PyObject * debugLevel(PyObject *self, PyObject *args) {
     return PyLong_FromLong(res);
 }
 
+PyObject * closeConnection(PyObject *self, PyObject *args) {
+    int res;
+
+    res = coapCloseConnection();
+    
+    return PyLong_FromLong(res);
+}
+
 PyObject * request(PyObject *self, PyObject *args) {
     char *gateway, *uri;
 
@@ -168,6 +176,7 @@ static PyMethodDef CoapMethods[] = {
     {"DTLSRequest", requestDTLS, METH_VARARGS, "Make a COAP GET Request."},
     {"DTLSPutRequest", putRequestDTLS, METH_VARARGS, "Make a COAP PUT Request."},
     {"DTLSPostRequest", postRequestDTLS, METH_VARARGS, "Make a COAP POST Request."},
+    {"DTLSCloseConnection", closeConnection, METH_NOARGS, "Close the DTLS connection if open."},
     {NULL, NULL, 0, NULL}
 };
 
