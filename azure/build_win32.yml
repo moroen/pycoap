@@ -4,17 +4,19 @@ jobs:
     vmImage: "windows-2019"
 
   steps:      
-  - script: cinst msys2 --params "\InstallDir=$(System.DefaultWorkingDirectory)/msys64" --no-progress
+  - script: | 
+      cinst msys2 --params "\InstallDir=c:/msys64" --no-progress
+      refreshenv
     displayName: install msys2
   - script: |
-      $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syyuu
-      $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syuu
+      pacman --noconfirm -Syyuu
+      pacman --noconfirm -Syuu
     displayName: Update MSYS2
   - script: |
-      $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm --needed -S base-devel mingw-w64-i686-toolchain
-      $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Scc
-      $(System.DefaultWorkingDirectory)\msys64\usr\bin\sed -i "s|#CacheDir.*|CacheDir=/c/Users/%USERNAME%/AppData/Local/Temp|g" /etc/pacman.conf
-      del $(System.DefaultWorkingDirectory)\msys64\mingw32\bin\python.exe
+      pacman --noconfirm --needed -S base-devel mingw-w64-i686-toolchain
+      pacman --noconfirm -Scc
+      ed -i "s|#CacheDir.*|CacheDir=/c/Users/%USERNAME%/AppData/Local/Temp|g" /etc/pacman.conf
+      del c:\msys64\mingw32\bin\python.exe
     displayName: Install Toolchain
   - task: UsePythonVersion@0
     inputs:
