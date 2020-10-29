@@ -9,14 +9,14 @@ jobs:
       refreshenv
     displayName: install msys2
   - script: |
-      pacman --noconfirm -Syyuu
-      pacman --noconfirm -Syuu
+      c:\tools\msys64\usr\bin\pacman --noconfirm -Syyuu
+      c:\tools\msys64\usr\bin\pacman --noconfirm -Syuu
     displayName: Update MSYS2
   - script: |
-      pacman --noconfirm --needed -S base-devel mingw-w64-i686-toolchain
-      pacman --noconfirm -Scc
-      ed -i "s|#CacheDir.*|CacheDir=/c/Users/%USERNAME%/AppData/Local/Temp|g" /etc/pacman.conf
-      del c:\msys64\mingw32\bin\python.exe
+      c:\tools\msys64\usr\bin\pacman --noconfirm --needed -S base-devel mingw-w64-i686-toolchain
+      c:\tools\msys64\usr\bin\pacman --noconfirm -Scc
+      c:\tools\msys64\usr\bin\sed -i "s|#CacheDir.*|CacheDir=/c/Users/%USERNAME%/AppData/Local/Temp|g" /etc/pacman.conf
+      del c:\tools\msys64\mingw32\bin\python.exe
     displayName: Install Toolchain
   - task: UsePythonVersion@0
     inputs:
