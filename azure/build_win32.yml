@@ -20,9 +20,9 @@ jobs:
     displayName: Install Toolchain
   - task: UsePythonVersion@0
     inputs:
-      versionSpec: '3.5'
+      versionSpec: '3.8'
       architecture: 'x86'
-    displayName: "Set Python version to 3.5"
+    displayName: "Set Python version to 3.8"
 
   - template: build_python.yml
 

@@ -10,6 +10,10 @@ pys=(${pys[@]//*2*/})
 # Filter out Python 3.4
 pys=(${pys[@]//*34*/})
 
+# Filter out Python 3.5
+pys=(${pys[@]//*35*/})
+
+
 # Install go
 yum -y install wget
 wget https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz
