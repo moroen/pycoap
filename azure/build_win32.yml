@@ -4,11 +4,8 @@ jobs:
     vmImage: "windows-2019"
 
   steps:      
-  - script: |
-      git clone https://github.com/msys2/msys2-ci-base.git $(System.DefaultWorkingDirectory)\msys64
-      $(System.DefaultWorkingDirectory)\msys64\usr\bin\rm -rf $(System.DefaultWorkingDirectory)\msys64\.git
-    displayName: Install MSYS2
-
+  - script: cinst msys2 --params "\InstallDir=$(System.DefaultWorkingDirectory)/msys64" --no-progress
+    displayName: install msys2
   - script: |
       $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syyuu
       $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syuu
