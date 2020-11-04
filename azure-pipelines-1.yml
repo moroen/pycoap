@@ -1,5 +1,6 @@
 variables:
   CIBW_BUILD: "cp38-win32"
+  CIBW_ENVIRONMENT_WINDOWS: "CGO_LDFLAGS='-LC:/cibw/python/pythonx86.3.8.4/tools/libs'"
 
 jobs:
 - job: linux
@@ -28,9 +29,10 @@ jobs:
   pool: {vmImage: 'vs2017-win2016'}
   steps:
     - task: UsePythonVersion@0
-    - script: choco install vcpython27 -f -y
-      displayName: Install Visual C++ for Python 2.7
+    # - script: choco install vcpython27 -f -y
+    #   displayName: Install Visual C++ for Python 2.7
     - bash: |
+        go env
         python -m pip install --upgrade pip
         pip install cibuildwheel==1.6.4
         cibuildwheel --output-dir wheelhouse .
