@@ -1,3 +1,4 @@
+
 # Starter pipeline
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
@@ -14,12 +15,13 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
 
-    choco install msys2 --params "/NoUpdate /InstallDir:C:\msys64"
+    choco install msys2 --params "/NoUpdate /InstallDir:$(System.DefaultWorkingDirectory)\msys64"
 
-    dir c:\msys64
+    dir $(System.DefaultWorkingDirectory)\msys64
   displayName: 'Install msys2'
 
 - script: |
+      echo $(System.DefaultWorkingDirectory)
       $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syyuu
       $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syuu
   displayName: Update MSYS2
