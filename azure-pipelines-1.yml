@@ -25,3 +25,18 @@ steps:
       $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syyuu
       $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syuu
   displayName: Update MSYS2
+
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.7'
+    architecture: 'x86'
+  displayName: "Set Python version to 3.7"
+
+- script: |
+    set PATH=$(System.DefaultWorkingDirectory)\msys64\mingw32\bin;%PATH%
+    set GOARCH=386
+    set CGO_ENABLED=1
+    python -m pip install --upgrade pip setuptools
+    python -m pip install wheel
+    python setup.py bdist_wheel
+  displayName: Build wheel
