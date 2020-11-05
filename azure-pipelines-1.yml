@@ -13,5 +13,13 @@ steps:
 - script: |
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
-    dir c:\ProgramData\chocolatey\bin
-  displayName: 'Run a multi-line script'
+
+    choco install msys2 --params "/NoUpdate /InstallDir:C:\msys64"
+
+    dir c:\msys64
+  displayName: 'Install msys2'
+
+- script: |
+      $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syyuu
+      $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syuu
+  displayName: Update MSYS2
