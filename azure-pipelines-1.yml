@@ -13,5 +13,5 @@ steps:
 - script: |
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
-    dir c:\ProgramData\chocolatey
+    dir c:\ProgramData\chocolatey\bin
   displayName: 'Run a multi-line script'
