@@ -1,6 +1,6 @@
 variables:
   CIBW_BUILD: "cp38-win32"
-#  CIBW_ENVIRONMENT_WINDOWS: "CGO_LDFLAGS='-LC:/cibw/python/pythonx86.3.8.4/tools/libs'"
+  CIBW_ENVIRONMENT_WINDOWS: GOARCH=386 CGO_ENABLED=1
 
 jobs:
 - job: linux
