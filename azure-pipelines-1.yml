@@ -13,31 +13,26 @@ pool:
 steps:  
 - script: |
     choco install msys2 --params "/InstallDir:$(System.DefaultWorkingDirectory)\msys64"
-    dir $(System.DefaultWorkingDirectory)\msys64
-    dir $(System.DefaultWorkingDirectory)\msys64\mingw32
-    dir $(System.DefaultWorkingDirectory)\msys64\mingw32\bin
-    dir $(System.DefaultWorkingDirectory)\msys64\mingw64
-    dir $(System.DefaultWorkingDirectory)\msys64\mingw64\bin
   displayName: 'Install msys2'
 
-# - script: |
-#       echo $(System.DefaultWorkingDirectory)
-#       $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syyuu
-#       $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syuu
+- script: |
+      $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syyuu
+      $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syuu
 
-#       dir $(System.DefaultWorkingDirectory)\msys64
-#       dir $(System.DefaultWorkingDirectory)\msys64\mingw32
-#       dir $(System.DefaultWorkingDirectory)\msys64\mingw32\bin
-#       dir $(System.DefaultWorkingDirectory)\msys64\mingw64
-#       dir $(System.DefaultWorkingDirectory)\msys64\mingw64\bin
-#   displayName: Update MSYS2
+      dir $(System.DefaultWorkingDirectory)\msys64
+      dir $(System.DefaultWorkingDirectory)\msys64\mingw32
+      dir $(System.DefaultWorkingDirectory)\msys64\mingw32\bin
+      dir $(System.DefaultWorkingDirectory)\msys64\mingw64
+      dir $(System.DefaultWorkingDirectory)\msys64\mingw64\bin
+  displayName: Update MSYS2
 
-# - script: |
-#     set PATH=$(System.DefaultWorkingDirectory)\msys64\mingw32\bin;%PATH%
-#     $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman -S mingw-w64-i686-python
-#     where.exe python
-#     python --version
-#   displayName: Install python
+- script: |
+    set PATH=$(System.DefaultWorkingDirectory)\msys64\mingw32\bin;%PATH%
+    $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman -S mingw-w64-i686-python
+    dir $(System.DefaultWorkingDirectory)\msys64\mingw32\bin
+    where.exe python
+    python --version
+  displayName: Install python
     
 # - script: |
 #     set PATH=$(System.DefaultWorkingDirectory)\msys64\mingw32\bin;%PATH%
