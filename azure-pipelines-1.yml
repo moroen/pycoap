@@ -35,3 +35,8 @@ steps:
     python -m pip install wheel
     python setup.py bdist_wheel
   displayName: Build wheel
+  
+- task: PublishPipelineArtifact@0
+  inputs:
+    artifactName: 'win32'
+    targetPath: 'dist'
