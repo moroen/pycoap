@@ -12,11 +12,7 @@ pool:
 
 steps:
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-
     choco install msys2 --params "/NoUpdate /InstallDir:$(System.DefaultWorkingDirectory)\msys64"
-
     dir $(System.DefaultWorkingDirectory)\msys64
   displayName: 'Install msys2'
 
@@ -26,16 +22,14 @@ steps:
       $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syuu
   displayName: Update MSYS2
 
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '3.7'
-    architecture: 'x86'
-  displayName: "Set Python version to 3.7"
-
+- script: |
+    $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman -S -S mingw-w64-i686-python
+    where.exe python
+    python--version
+  displayName: Install python
+    
 - script: |
     set PATH=$(System.DefaultWorkingDirectory)\msys64\mingw32\bin;%PATH%
-    set GOARCH=386
-    set CGO_ENABLED=1
     python -m pip install --upgrade pip setuptools
     python -m pip install wheel
     python setup.py bdist_wheel
