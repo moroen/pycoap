@@ -12,7 +12,7 @@ pool:
 
 steps:  
 - script: |
-    choco install msys2 --params "/NoUpdate /InstallDir:$(System.DefaultWorkingDirectory)\msys64"
+    choco install msys2 --params "/InstallDir:$(System.DefaultWorkingDirectory)\msys64"
     dir $(System.DefaultWorkingDirectory)\msys64
     dir $(System.DefaultWorkingDirectory)\msys64\mingw32
     dir $(System.DefaultWorkingDirectory)\msys64\mingw32\bin
@@ -24,6 +24,12 @@ steps:
 #       echo $(System.DefaultWorkingDirectory)
 #       $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syyuu
 #       $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syuu
+
+#       dir $(System.DefaultWorkingDirectory)\msys64
+#       dir $(System.DefaultWorkingDirectory)\msys64\mingw32
+#       dir $(System.DefaultWorkingDirectory)\msys64\mingw32\bin
+#       dir $(System.DefaultWorkingDirectory)\msys64\mingw64
+#       dir $(System.DefaultWorkingDirectory)\msys64\mingw64\bin
 #   displayName: Update MSYS2
 
 # - script: |
