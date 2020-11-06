@@ -15,36 +15,36 @@ steps:
     choco install msys2 --params "/NoUpdate /InstallDir:$(System.DefaultWorkingDirectory)\msys64"
   displayName: 'Install msys2'
 
-# - script: |
-#       $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syyuu
-#       $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syuu
-#       dir $(System.DefaultWorkingDirectory)\msys64
-#       dir $(System.DefaultWorkingDirectory)\msys64\mingw32
-#       dir $(System.DefaultWorkingDirectory)\msys64\mingw32\bin
-#       dir $(System.DefaultWorkingDirectory)\msys64\mingw64
-#       dir $(System.DefaultWorkingDirectory)\msys64\mingw64\bin
-#   displayName: Update MSYS2
+- script: |
+      $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syyuu
+      $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syuu
+  displayName: Update MSYS2
+
+- script: |
+      $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -S mingw-w64-i686-toolchain
+  displayName: Install Toolchain
 
 - script: |
     set PATH=$(System.DefaultWorkingDirectory)\msys64\mingw32\bin;%PATH%
     $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman -S --noconfirm mingw-w64-i686-python
-    dir $(System.DefaultWorkingDirectory)\msys64\mingw32\bin
-    dir $(System.DefaultWorkingDirectory)\msys64\mingw64\bin
-    where.exe python
-    python --version
   displayName: Install python
     
-# - script: |
-#     set PATH=$(System.DefaultWorkingDirectory)\msys64\mingw32\bin;%PATH%
-#     echo %PATH%
-#     dir $(System.DefaultWorkingDirectory)\msys64\mingw32\bin
-#     where.exe python
-#     python -m pip install --upgrade pip setuptools
-#     python -m pip install wheel
-#     python setup.py bdist_wheel
-#   displayName: Build wheel
+- script: |
+    set PATH=$(System.DefaultWorkingDirectory)\msys64\mingw32\bin;%PATH%
+    where.exe gcc
+    where.exe ld
+    where.exe python
+    python --version
+  displayName: Check tools
+
+- script: |
+    set PATH=$(System.DefaultWorkingDirectory)\msys64\mingw32\bin;%PATH%
+    python -m pip install --upgrade pip setuptools
+    python -m pip install wheel
+    python setup.py bdist_wheel
+  displayName: Build wheel
   
-# - task: PublishPipelineArtifact@0
-#   inputs:
-#     artifactName: 'win32'
-#     targetPath: 'dist'
+- task: PublishPipelineArtifact@0
+  inputs:
+    artifactName: 'win32'
+    targetPath: 'dist'
