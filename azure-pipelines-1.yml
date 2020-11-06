@@ -23,9 +23,10 @@ steps:
   displayName: Update MSYS2
 
 - script: |
+    set PATH=$(System.DefaultWorkingDirectory)\msys64\mingw32\bin;%PATH%
     $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman -S -S mingw-w64-i686-python
     where.exe python
-    python--version
+    python --version
   displayName: Install python
     
 - script: |
