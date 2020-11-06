@@ -13,6 +13,8 @@ pool:
 steps:
 - script: |
     echo %PATH%
+    set PATH=c:\msys64\mingw32\bin;%PATH%
+    echo %PATH%
   displayName: "Testing"
   
 # - script: |
