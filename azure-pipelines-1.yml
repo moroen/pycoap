@@ -16,6 +16,8 @@ steps:
     dir $(System.DefaultWorkingDirectory)\msys64
     dir $(System.DefaultWorkingDirectory)\msys64\mingw32
     dir $(System.DefaultWorkingDirectory)\msys64\mingw32\bin
+    dir $(System.DefaultWorkingDirectory)\msys64\mingw64
+    dir $(System.DefaultWorkingDirectory)\msys64\mingw64\bin
   displayName: 'Install msys2'
 
 # - script: |
