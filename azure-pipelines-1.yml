@@ -12,31 +12,35 @@ pool:
 
 steps:
 - script: |
-    choco install msys2 --params "/NoUpdate /InstallDir:$(System.DefaultWorkingDirectory)\msys64"
-    dir $(System.DefaultWorkingDirectory)\msys64
-  displayName: 'Install msys2'
-
-- script: |
-      echo $(System.DefaultWorkingDirectory)
-      $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syyuu
-      $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syuu
-  displayName: Update MSYS2
-
-- script: |
-    set PATH=$(System.DefaultWorkingDirectory)\msys64\mingw32\bin;%PATH%
-    $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman -S mingw-w64-i686-python
-    where.exe python
-    python --version
-  displayName: Install python
-    
-- script: |
-    set PATH=$(System.DefaultWorkingDirectory)\msys64\mingw32\bin;%PATH%
-    python -m pip install --upgrade pip setuptools
-    python -m pip install wheel
-    python setup.py bdist_wheel
-  displayName: Build wheel
+    echo %PATH%
+  displayName: "Testing"
   
-- task: PublishPipelineArtifact@0
-  inputs:
-    artifactName: 'win32'
-    targetPath: 'dist'
+# - script: |
+#     choco install msys2 --params "/NoUpdate /InstallDir:$(System.DefaultWorkingDirectory)\msys64"
+#     dir $(System.DefaultWorkingDirectory)\msys64
+#   displayName: 'Install msys2'
+
+# - script: |
+#       echo $(System.DefaultWorkingDirectory)
+#       $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syyuu
+#       $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman --noconfirm -Syuu
+#   displayName: Update MSYS2
+
+# - script: |
+#     set PATH=$(System.DefaultWorkingDirectory)\msys64\mingw32\bin;%PATH%
+#     $(System.DefaultWorkingDirectory)\msys64\usr\bin\pacman -S mingw-w64-i686-python
+#     where.exe python
+#     python --version
+#   displayName: Install python
+    
+# - script: |
+#     set PATH=$(System.DefaultWorkingDirectory)\msys64\mingw32\bin;%PATH%
+#     python -m pip install --upgrade pip setuptools
+#     python -m pip install wheel
+#     python setup.py bdist_wheel
+#   displayName: Build wheel
+  
+# - task: PublishPipelineArtifact@0
+#   inputs:
+#     artifactName: 'win32'
+#     targetPath: 'dist'
