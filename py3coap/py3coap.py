@@ -9,6 +9,8 @@ POST = 2
 def setDebugLevel(level):
     _py3coap.DebugLevel(level)
 
+def CloseConnection():
+    _py3coap.DTLSCloseConnection()
 
 def Request(uri, payload=None, method=GET, ident=None, key=None):
 

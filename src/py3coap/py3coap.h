@@ -27,6 +27,7 @@ coapresult coapPutRequest(char *, char *, char *);
 coapresult coapRequestDTLS(char *, char*, char *, char *);
 coapresult coapPutRequestDTLS(char *, char *, char *, char *, char *);
 coapresult coapPostRequestDTLS(char *, char *, char *, char *, char *);
+int coapCloseConnection();
 
 
 // int raiseError(int);
