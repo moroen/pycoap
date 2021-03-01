@@ -4,13 +4,14 @@ cflags = $(shell pkg-config --cflags python3)
 ldflags = -Wl,$(shell pkg-config --libs python3-embed)
 hdir = $(shell pwd)
 
-target = _py3coap.cpython-38-x86_64-linux-gnu.so
+target = _py3coap$(shell python3-config --extension-suffix)
+
 
 
 # ldflags = -Wl,-undefined,$(shell pkg-config --libs python3-embed)
 
 dummy:
-
+	echo $(target)
 
 
 $(gocoap):
