@@ -17,7 +17,7 @@ dummy:
 $(gocoap):
 	go get github.com/moroen/gocoap
 
-lib: $(gocoap)
+pythonlib: $(gocoap)
 	CGO_CFLAGS=$(cflags) CGO_LDFLAGS=$(ldflags) go build -buildmode=c-shared -o $(hdir)/$(target) ./src/py3coap/
 
 module:
