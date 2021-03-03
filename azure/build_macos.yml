@@ -1,16 +1,18 @@
 jobs:
   - job:  macos
     pool:
-      vmImage: "macOS-10.14"
+      vmImage: "macOS-10.15"
     
     strategy:
       matrix:
         Python36:
           python.version: '3.6'
-        # Python37:
-        #   python.version: '3.7'
-        # Python38:
-        #   python.version: '3.8'
+        Python37:
+          python.version: '3.7'
+        Python38:
+          python.version: '3.8'
+        Python39:
+          python.version: '3.9'
 
     steps:
     - task: UsePythonVersion@0
@@ -20,7 +22,6 @@ jobs:
       displayName: 'Use python $(python.version)'
 
     - script: |
-        git clone https://github.com/moroen/gocoaplib.git src/github.com/moroen/gocoaplib
         make libs
 
     - script: |
