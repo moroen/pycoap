@@ -20,7 +20,6 @@ jobs:
       displayName: 'Use python $(python.version)'
 
     - script: |
-        git clone https://github.com/moroen/gocoaplib.git src/github.com/moroen/gocoaplib
         make libs
 
     - script: |
