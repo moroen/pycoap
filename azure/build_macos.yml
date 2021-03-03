@@ -7,10 +7,10 @@ jobs:
       matrix:
         Python36:
           python.version: '3.6'
-        Python37:
-          python.version: '3.7'
-        Python38:
-          python.version: '3.8'
+        # Python37:
+        #   python.version: '3.7'
+        # Python38:
+        #   python.version: '3.8'
 
     steps:
     - task: UsePythonVersion@0
@@ -18,6 +18,10 @@ jobs:
         versionSpec: '$(python.version)'
         architecture: "x64"
       displayName: 'Use python $(python.version)'
+
+    - script: |
+        git clone https://github.com/moroen/gocoaplib.git src/github.com/moroen/gocoaplib
+        make libs
 
     - script: |
         python -m pip install --upgrade pip setuptools
