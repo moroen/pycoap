@@ -13,13 +13,17 @@ pys=(${pys[@]//*34*/})
 # Filter out Python 3.5
 pys=(${pys[@]//*35*/})
 
-
 # Install go
-yum -y install wget
-wget https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz
-tar -xzf go1.13.1.linux-amd64.tar.gz
+# yum -y install wget
+# wget https://golang.org/dl/go1.16.linux-amd64.tar.gz
+# tar -xzf go1.16.linux-amd64.tar.gz
 
 export PATH=$PATH:`pwd`/go/bin
+export GOPATH=/io/
+export GO111MODULE=off
+
+go get -d -v github.com/moroen/gocoaplib
+go build -buildmode=c-archive -o /io/lib/static/libgocoap.a /io/src/github.com/moroen/gocoaplib/main.go
 
 # Compile wheels
 for PYBIN in "${pys[@]}"; do

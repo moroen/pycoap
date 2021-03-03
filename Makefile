@@ -7,12 +7,9 @@ hdir = $(shell pwd)
 
 target = _py3coap$(shell python3-config --extension-suffix)
 
-gocoaplib = src/github.com/moroen/gocoaplib
-
-
 static_lib = lib/static/libgocoap.a
 shared_lib = lib/shared/libgocoap.so
-lib_source = src/github.com/moroen/gocoaplib/gocoaplib.go
+lib_source = src/github.com/moroen/gocoaplib/main.go
 
 dummy:
 	echo $(target)
@@ -20,13 +17,13 @@ dummy:
 
 libs: $(static_lib) $(shared_lib)
 
-$(gocoaplib):
-	go get -v github.com/moroen/gocoaplib
+$(lib_source):
+	go get -v -d github.com/moroen/gocoaplib
 
-$(static_lib): $(gocoaplib)
+$(static_lib): $(lib_source)
 	go build -buildmode=c-archive -o $(static_lib) $(lib_source)
 
-$(shared_lib): $(gocoaplib)
+$(shared_lib): $(lib_source)
 	go build -buildmode=c-shared -o $(shared_lib) $(lib_source)
 
 
