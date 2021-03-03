@@ -1,5 +1,6 @@
 #define Py_LIMITED_API
 #include "py3coap.h"
+#include <libgocoap.h>
 #include <stdio.h>
 
 PyObject * sum(PyObject *, PyObject *);
@@ -232,5 +233,4 @@ void raiseError(int e) {
         case error_malformedurierror: PyErr_SetString(MalformedUriError, "COAP Error: Unknown error");
     }
 }
-
 

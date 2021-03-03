@@ -14,10 +14,15 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: Implementation :: CPython",
     ],
-    ext_modules=[Extension("_py3coap", ["src/py3coap/py3coap.go"])],
-    data_files=[('src/py3coap', ['src/py3coap/py3coap.h', 'src/py3coap/py3coap.c'])],
+    ext_modules=[Extension("_py3coap", ["src/py3coap/py3coap.c"], 
+                           include_dirs=['lib/static'],
+                           library_dirs=['lib/static'],
+                           libraries=['gocoap']
+        
+        )],
+    # data_files=[('src/py3coap', ['src/py3coap/py3coap.h', 'src/py3coap/py3coap.c'])],
     packages=["py3coap"],
-    build_golang={"root": "github.com/moroen/py3coap"},
-    setup_requires=["setuptools-golang"],
+    # build_golang={"root": "github.com/moroen/py3coap"},
+    # setup_requires=["setuptools-golang"],
     scripts=["pycoap-client"],
 )

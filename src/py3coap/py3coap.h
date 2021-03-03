@@ -12,24 +12,6 @@
 #define error_unknownerror 7
 #define error_malformedurierror 8
 
-struct pycoap_result
-{
-    char * result;
-    int error;
-};
-
-typedef struct pycoap_result coapresult;
-
-// Coap Functions
-int coapDebugLevel(int);
-coapresult coapRequest(char *, char*);
-coapresult coapPutRequest(char *, char *, char *);
-coapresult coapRequestDTLS(char *, char*, char *, char *);
-coapresult coapPutRequestDTLS(char *, char *, char *, char *, char *);
-coapresult coapPostRequestDTLS(char *, char *, char *, char *, char *);
-int coapCloseConnection();
-
-
 // int raiseError(int);
 void raiseError(int);
 
