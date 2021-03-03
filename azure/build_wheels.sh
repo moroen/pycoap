@@ -14,9 +14,9 @@ pys=(${pys[@]//*34*/})
 pys=(${pys[@]//*35*/})
 
 # Install go
-# yum -y install wget
-# wget https://golang.org/dl/go1.16.linux-amd64.tar.gz
-# tar -xzf go1.16.linux-amd64.tar.gz
+yum -y install wget
+wget https://golang.org/dl/go1.16.linux-amd64.tar.gz
+tar -xzf go1.16.linux-amd64.tar.gz
 
 export PATH=$PATH:`pwd`/go/bin
 export GOPATH=/io/
