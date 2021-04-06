@@ -10,6 +10,7 @@ target = _py3coap$(shell python3-config --extension-suffix)
 static_lib = lib/static/libgocoap.a
 shared_lib = lib/shared/libgocoap.so
 lib_source = src/github.com/moroen/gocoaplib/main.go
+user = 
 
 dummy:
 	echo $(target)
@@ -33,8 +34,12 @@ $(shared_lib): $(lib_source)
 pythonlib: $(static_lib)
 	gcc src/py3coap/py3coap.c -shared -fPIC -Ilib/static -Llib/static $(cflags) $(ldflags) -lgocoap $(python-config --cflags --ldflags --embed) -o $(target)
 
+
+user-module: user=--user
+user-module: module
+
 module: $(static_lib)
-	python3 setup.py install --user
+	python3 setup.py install $(user)
 
 develop: $(static_lib)
 	python3 setup.py develop --user
