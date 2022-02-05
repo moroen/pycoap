@@ -15,11 +15,16 @@ pys=(${pys[@]//*35*/})
 
 
 # Install go
-yum -y install wget
-wget https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz
-tar -xzf go1.13.1.linux-amd64.tar.gz
+apt upgrade
+apt -y update 
+apt -y install wget
+
+wget https://go.dev/dl/go1.17.6.linux-amd64.tar.gz
+tar xzf go1.17.6.linux-amd64.tar.gz
 
 export PATH=$PATH:`pwd`/go/bin
+
+cd /io
 
 # Compile wheels
 for PYBIN in "${pys[@]}"; do
@@ -29,8 +34,8 @@ done
 
 # Bundle external shared libraries into the wheels
 for whl in wheelhouse/$package_name-*.whl; do
-    auditwheel repair --plat $PLAT "$whl" -w /io/wheelhouse/
+    auditwheel repair --plat $PLAT "$whl" -w /io/dist/
 done
 
 # Remove 2010-wheels
-rm /io/wheelhouse/*2010*
+# rm /io/wheelhouse/*2010*
